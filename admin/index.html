@@ -1,165 +1,689 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <title>Famms Admin - Decap CMS</title>
-    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.css" />
-    <!-- Netlify Identity Widget -->
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Famms Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+            --light-bg: #ecf0f1;
+            --dark-text: #2c3e50;
+        }
+
         body {
+            background-color: var(--light-bg);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .sidebar {
+            background: linear-gradient(135deg, var(--primary-color), #34495e);
+            min-height: 100vh;
+            color: white;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-header h3 {
             margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-                'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-                sans-serif;
-            background-color: #fff;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+
+        .sidebar-menu .nav-link {
+            color: rgba(255,255,255,0.8);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-menu .nav-link:hover,
+        .sidebar-menu .nav-link.active {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        .sidebar-menu .nav-link i {
+            margin-right: 10px;
+            width: 20px;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .content-header {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .stats-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stats-card .stats-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .stats-card.primary .stats-icon {
+            background-color: rgba(52, 152, 219, 0.1);
+            color: var(--secondary-color);
+        }
+
+        .stats-card.success .stats-icon {
+            background-color: rgba(39, 174, 96, 0.1);
+            color: var(--success-color);
+        }
+
+        .stats-card.warning .stats-icon {
+            background-color: rgba(243, 156, 18, 0.1);
+            color: var(--warning-color);
+        }
+
+        .stats-card.danger .stats-icon {
+            background-color: rgba(231, 76, 60, 0.1);
+            color: var(--danger-color);
+        }
+
+        .content-section {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .btn-custom {
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary-custom {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-primary-custom:hover {
+            background-color: #2980b9;
+            color: white;
+        }
+
+        .mobile-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .mobile-toggle {
+                display: block;
+            }
+        }
+
+        .form-section {
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        .quick-action-btn {
+            background: white;
+            border: 2px solid var(--light-bg);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: var(--dark-text);
+            display: block;
+        }
+
+        .quick-action-btn:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .quick-action-btn i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            display: block;
         }
     </style>
 </head>
 <body>
-    <div id="nc-root"></div>
-    <div style="position: fixed; top: 20px; right: 20px; z-index: 1000;">
-        <button onclick="handleLogout()" style="background: #e74c3c; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600;">
-            🚪 Logout
-        </button>
+    <!-- Mobile Toggle Button -->
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3><i class="fas fa-store"></i> Famms Admin</h3>
+        </div>
+        <div class="sidebar-menu">
+            <a href="#" class="nav-link active" onclick="showSection('dashboard')">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+            <a href="#" class="nav-link" onclick="showSection('products')">
+                <i class="fas fa-box"></i> Products
+            </a>
+            <a href="#" class="nav-link" onclick="showSection('gallery')">
+                <i class="fas fa-images"></i> Gallery
+            </a>
+            <a href="#" class="nav-link" onclick="showSection('testimonials')">
+                <i class="fas fa-quote-left"></i> Testimonials
+            </a>
+            <a href="#" class="nav-link" onclick="showSection('settings')">
+                <i class="fas fa-cog"></i> Settings
+            </a>
+            <a href="../index.html" class="nav-link" target="_blank">
+                <i class="fas fa-eye"></i> View Site
+            </a>
+        </div>
     </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Dashboard Section -->
+        <div id="dashboard-section" class="form-section active">
+            <div class="content-header">
+                <h1><i class="fas fa-tachometer-alt"></i> Dashboard</h1>
+                <p class="text-muted">Welcome to Famms Admin Dashboard</p>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <div class="stats-card primary">
+                        <div class="stats-icon">
+                            <i class="fas fa-box"></i>
+                        </div>
+                        <h3 id="products-count">12</h3>
+                        <p class="text-muted">Products</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <div class="stats-card success">
+                        <div class="stats-icon">
+                            <i class="fas fa-images"></i>
+                        </div>
+                        <h3 id="gallery-count">8</h3>
+                        <p class="text-muted">Gallery Images</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <div class="stats-card warning">
+                        <div class="stats-icon">
+                            <i class="fas fa-quote-left"></i>
+                        </div>
+                        <h3 id="testimonials-count">5</h3>
+                        <p class="text-muted">Testimonials</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <div class="stats-card danger">
+                        <div class="stats-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3>1,234</h3>
+                        <p class="text-muted">Visitors</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h4>Quick Actions</h4>
+                <div class="row">
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <a href="#" class="quick-action-btn" onclick="showSection('products')">
+                            <i class="fas fa-plus-circle text-primary"></i>
+                            <h6>Add Product</h6>
+                        </a>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <a href="#" class="quick-action-btn" onclick="showSection('gallery')">
+                            <i class="fas fa-camera text-success"></i>
+                            <h6>Add Gallery Image</h6>
+                        </a>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <a href="#" class="quick-action-btn" onclick="showSection('testimonials')">
+                            <i class="fas fa-comment text-warning"></i>
+                            <h6>Add Testimonial</h6>
+                        </a>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <a href="#" class="quick-action-btn" onclick="showSection('settings')">
+                            <i class="fas fa-cog text-danger"></i>
+                            <h6>Site Settings</h6>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products Section -->
+        <div id="products-section" class="form-section">
+            <div class="content-header">
+                <h1><i class="fas fa-box"></i> Products Management</h1>
+                <p class="text-muted">Manage your products</p>
+            </div>
+
+            <div class="content-section">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4>Products List</h4>
+                    <button class="btn btn-primary-custom btn-custom" onclick="addProduct()">
+                        <i class="fas fa-plus"></i> Add Product
+                    </button>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Title</th>
+                                <th>Price</th>
+                                <th>Category</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="products-table">
+                            <!-- Products will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gallery Section -->
+        <div id="gallery-section" class="form-section">
+            <div class="content-header">
+                <h1><i class="fas fa-images"></i> Gallery Management</h1>
+                <p class="text-muted">Manage your gallery images</p>
+            </div>
+
+            <div class="content-section">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4>Gallery Images</h4>
+                    <button class="btn btn-primary-custom btn-custom" onclick="addGalleryImage()">
+                        <i class="fas fa-plus"></i> Add Image
+                    </button>
+                </div>
+                <div class="row" id="gallery-grid">
+                    <!-- Gallery images will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Testimonials Section -->
+        <div id="testimonials-section" class="form-section">
+            <div class="content-header">
+                <h1><i class="fas fa-quote-left"></i> Testimonials Management</h1>
+                <p class="text-muted">Manage customer testimonials</p>
+            </div>
+
+            <div class="content-section">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4>Testimonials</h4>
+                    <button class="btn btn-primary-custom btn-custom" onclick="addTestimonial()">
+                        <i class="fas fa-plus"></i> Add Testimonial
+                    </button>
+                </div>
+                <div id="testimonials-list">
+                    <!-- Testimonials will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Section -->
+        <div id="settings-section" class="form-section">
+            <div class="content-header">
+                <h1><i class="fas fa-cog"></i> Site Settings</h1>
+                <p class="text-muted">Configure your website settings</p>
+            </div>
+
+            <div class="content-section">
+                <h4>General Settings</h4>
+                <form id="settings-form">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="store-name" class="form-label">Store Name</label>
+                            <input type="text" class="form-control" id="store-name" value="Famms">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="store-email" class="form-label">Store Email</label>
+                            <input type="email" class="form-control" id="store-email" value="demo@gmail.com">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="store-phone" class="form-label">Store Phone</label>
+                            <input type="tel" class="form-control" id="store-phone" value="+01 1234567890">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="whatsapp-number" class="form-label">WhatsApp Number</label>
+                            <input type="tel" class="form-control" id="whatsapp-number" value="+6281234567890">
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label for="store-address" class="form-label">Store Address</label>
+                            <textarea class="form-control" id="store-address" rows="3">Your Store Address</textarea>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary-custom btn-custom">
+                        <i class="fas fa-save"></i> Save Settings
+                    </button>
+                </form>
+            </div>
+
+            <div class="content-section">
+                <h4>Social Media Links</h4>
+                <form id="social-form">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="instagram-url" class="form-label">Instagram URL</label>
+                            <input type="url" class="form-control" id="instagram-url" value="#">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="facebook-url" class="form-label">Facebook URL</label>
+                            <input type="url" class="form-control" id="facebook-url" value="#">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="twitter-url" class="form-label">Twitter URL</label>
+                            <input type="url" class="form-control" id="twitter-url" value="#">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="linkedin-url" class="form-label">LinkedIn URL</label>
+                            <input type="url" class="form-control" id="linkedin-url" value="#">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary-custom btn-custom">
+                        <i class="fas fa-save"></i> Save Social Links
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Initialize Decap CMS with git-gateway backend for production
-        CMS.init({
-            config: {
-                backend: {
-                    name: 'git-gateway',
-                    branch: 'master'
-                },
-                publish_mode: "editorial_workflow",
-                media_folder: "images/uploads",
-                public_folder: "/images/uploads",
-                logo_url: "/images/logo.png",
-                collections: [
-                    {
-                        name: "about",
-                        label: "About Page",
-                        files: [
-                            {
-                                name: "about",
-                                label: "About Us Page",
-                                file: "content/about.json",
-                                fields: [
-                                    { label: "Hero Title", name: "hero_title", widget: "string", default: "About Famms" },
-                                    { label: "Hero Subtitle", name: "hero_subtitle", widget: "string", default: "Your Trusted Fashion Partner Since 2020" },
-                                    { label: "Hero Description", name: "hero_description", widget: "text", default: "We are dedicated to providing high-quality fashion products that combine style, comfort, and affordability for the modern consumer." },
-                                    { label: "Story Title", name: "story_title", widget: "string", default: "Our Story" },
-                                    { label: "Story Subtitle", name: "story_subtitle", widget: "string", default: "From a small idea to a fashion destination" },
-                                    { label: "Story Content", name: "story_content", widget: "text", default: "Founded in 2020, Famms began as a small boutique with a big vision: to make quality fashion accessible to everyone." },
-                                    { label: "Story Content 2", name: "story_content_2", widget: "text", default: "Our journey has been driven by passion for fashion and commitment to customer satisfaction." },
-                                    { label: "Story Content 3", name: "story_content_3", widget: "text", default: "Today, Famms stands as a testament to what can be achieved with dedication, hard work, and a genuine love for fashion." },
-                                    { label: "Gallery Title", name: "gallery_title", widget: "string", default: "Our Gallery" },
-                                    { label: "Gallery Subtitle", name: "gallery_subtitle", widget: "string", default: "Explore our collection" },
-                                    { label: "Gallery Images", name: "gallery_images", widget: "list", field: { label: "Image", name: "image", widget: "image", required: false } },
-                                    { label: "CTA Title", name: "cta_title", widget: "string", default: "Ready to Experience the Famms Difference?" },
-                                    { label: "CTA Description", name: "cta_description", widget: "text", default: "Join thousands of satisfied customers who have discovered their perfect style with us." }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        name: "products",
-                        label: "Products",
-                        folder: "content/products",
-                        create: true,
-                        slug: "{{slug}}",
-                        fields: [
-                            { label: "Title", name: "title", widget: "string" },
-                            { label: "Price", name: "price", widget: "string" },
-                            { label: "Image", name: "image", widget: "image" },
-                            { label: "Category", name: "category", widget: "select", options: ["Men", "Women", "Kids", "Accessories"] },
-                            { label: "Description", name: "description", widget: "text", required: false },
-                            { label: "WhatsApp", name: "whatsapp", widget: "string", hint: "Format: 628123456789" }
-                        ]
-                    },
-                    {
-                        name: "site_settings",
-                        label: "Site Settings",
-                        files: [
-                            {
-                                name: "settings",
-                                label: "General Settings",
-                                file: "content/settings.json",
-                                fields: [
-                                    { label: "Store Name", name: "store_name", widget: "string", default: "Famms" },
-                                    { label: "Store Description", name: "store_description", widget: "text", required: false },
-                                    { label: "WhatsApp Number", name: "whatsapp_number", widget: "string", default: "628123456789" },
-                                    { label: "Instagram URL", name: "instagram_url", widget: "string", default: "#" },
-                                    { label: "Facebook URL", name: "facebook_url", widget: "string", default: "#" },
-                                    { label: "Twitter URL", name: "twitter_url", widget: "string", default: "#" },
-                                    { label: "LinkedIn URL", name: "linkedin_url", widget: "string", default: "#" },
-                                    { label: "Pinterest URL", name: "pinterest_url", widget: "string", default: "#" },
-                                    { label: "Address", name: "address", widget: "string", default: "Your Store Address" },
-                                    { label: "Phone", name: "phone", widget: "string", default: "+01 1234567890" },
-                                    { label: "Email", name: "email", widget: "string", default: "demo@gmail.com" }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        name: "testimonials",
-                        label: "Testimonials",
-                        folder: "content/testimonials",
-                        create: true,
-                        slug: "{{slug}}",
-                        fields: [
-                            { label: "Name", name: "name", widget: "string" },
-                            { label: "Role", name: "role", widget: "string" },
-                            { label: "Content", name: "content", widget: "text" },
-                            { label: "Image", name: "image", widget: "image", default: "images/client.jpg" },
-                            { label: "Rating", name: "rating", widget: "number", default: 5, min: 1, max: 5 }
-                        ]
-                    },
-                    {
-                        name: "gallery",
-                        label: "Gallery",
-                        folder: "content/gallery",
-                        create: true,
-                        slug: "{{slug}}",
-                        fields: [
-                            { label: "Title", name: "title", widget: "string" },
-                            { label: "Image", name: "image", widget: "image" },
-                            { label: "Category", name: "category", widget: "select", options: ["Fashion", "Products", "Store", "Events"] },
-                            { label: "Alt Text", name: "alt_text", widget: "string", required: false }
-                        ]
-                    }
-                ]
-            }
-        });
-        
-        // Handle authentication and redirect
-        if (window.netlifyIdentity) {
-            window.netlifyIdentity.on('init', user => {
-                if (!user) {
-                    // User not logged in, redirect to login page
-                    window.location.href = '/admin/login.html';
-                } else {
-                    // User logged in, show CMS
-                    console.log('User authenticated:', user);
-                }
+        // Toggle Sidebar
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('active');
+        }
+
+        // Show Section
+        function showSection(section) {
+            // Hide all sections
+            document.querySelectorAll('.form-section').forEach(sec => {
+                sec.classList.remove('active');
             });
             
-            window.netlifyIdentity.on('logout', () => {
-                // User logged out, redirect to login page
-                window.location.href = '/admin/login.html';
+            // Remove active class from all nav links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
             });
-        } else {
-            // Netlify Identity not available, redirect to login
-            window.location.href = '/admin/login.html';
+            
+            // Show selected section
+            document.getElementById(section + '-section').classList.add('active');
+            
+            // Add active class to clicked nav link
+            event.target.classList.add('active');
+            
+            // Load data for the section
+            loadSectionData(section);
         }
-        
-        function handleLogout() {
-            if (window.netlifyIdentity) {
-                window.netlifyIdentity.logout();
+
+        // Load Section Data
+        function loadSectionData(section) {
+            switch(section) {
+                case 'products':
+                    loadProducts();
+                    break;
+                case 'gallery':
+                    loadGallery();
+                    break;
+                case 'testimonials':
+                    loadTestimonials();
+                    break;
+                case 'settings':
+                    loadSettings();
+                    break;
             }
+        }
+
+        // Load Products
+        function loadProducts() {
+            const productsTable = document.getElementById('products-table');
+            // Sample data - in real implementation, this would load from JSON files
+            const products = [
+                { id: 1, title: 'Men T-Shirt', price: '$29.99', category: 'Men', image: '../images/product-1.jpg' },
+                { id: 2, title: 'Women Dress', price: '$49.99', category: 'Women', image: '../images/product-2.jpg' },
+            ];
+            
+            productsTable.innerHTML = products.map(product => `
+                <tr>
+                    <td><img src="${product.image}" alt="${product.title}" width="50" height="50"></td>
+                    <td>${product.title}</td>
+                    <td>${product.price}</td>
+                    <td><span class="badge bg-primary">${product.category}</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary me-1" onclick="editProduct(${product.id})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteProduct(${product.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Load Gallery
+        function loadGallery() {
+            const galleryGrid = document.getElementById('gallery-grid');
+            // Sample data
+            const gallery = [
+                { id: 1, title: 'Fashion Show', image: '../images/gallery-1.jpg', category: 'Fashion' },
+                { id: 2, title: 'New Collection', image: '../images/gallery-2.jpg', category: 'Products' },
+            ];
+            
+            galleryGrid.innerHTML = gallery.map(item => `
+                <div class="col-md-4 col-sm-6 mb-3">
+                    <div class="card">
+                        <img src="${item.image}" class="card-img-top" alt="${item.title}">
+                        <div class="card-body">
+                            <h5 class="card-title">${item.title}</h5>
+                            <p class="card-text"><span class="badge bg-info">${item.category}</span></p>
+                            <div class="btn-group" role="group">
+                                <button class="btn btn-sm btn-outline-primary" onclick="editGalleryImage(${item.id})">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" onclick="deleteGalleryImage(${item.id})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Load Testimonials
+        function loadTestimonials() {
+            const testimonialsList = document.getElementById('testimonials-list');
+            // Sample data
+            const testimonials = [
+                { id: 1, name: 'John Doe', role: 'Customer', content: 'Great products and excellent service!', rating: 5 },
+                { id: 2, name: 'Jane Smith', role: 'Regular Customer', content: 'I love shopping at Famms!', rating: 5 },
+            ];
+            
+            testimonialsList.innerHTML = testimonials.map(testimonial => `
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h5 class="card-title">${testimonial.name}</h5>
+                                <p class="text-muted">${testimonial.role}</p>
+                                <p class="card-text">${testimonial.content}</p>
+                                <div class="text-warning">
+                                    ${'★'.repeat(testimonial.rating)}${'☆'.repeat(5-testimonial.rating)}
+                                </div>
+                            </div>
+                            <div class="btn-group" role="group">
+                                <button class="btn btn-sm btn-outline-primary" onclick="editTestimonial(${testimonial.id})">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" onclick="deleteTestimonial(${testimonial.id})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Load Settings
+        function loadSettings() {
+            // Settings are already loaded in the HTML form
+            console.log('Settings loaded');
+        }
+
+        // CRUD Operations (placeholders for actual implementation)
+        function addProduct() {
+            alert('Add Product functionality would open a modal or form');
+        }
+
+        function editProduct(id) {
+            alert(`Edit Product ${id} functionality would open a modal or form`);
+        }
+
+        function deleteProduct(id) {
+            if(confirm('Are you sure you want to delete this product?')) {
+                alert(`Product ${id} would be deleted`);
+                loadProducts(); // Reload the list
+            }
+        }
+
+        function addGalleryImage() {
+            alert('Add Gallery Image functionality would open a modal or form');
+        }
+
+        function editGalleryImage(id) {
+            alert(`Edit Gallery Image ${id} functionality would open a modal or form`);
+        }
+
+        function deleteGalleryImage(id) {
+            if(confirm('Are you sure you want to delete this image?')) {
+                alert(`Gallery Image ${id} would be deleted`);
+                loadGallery(); // Reload the list
+            }
+        }
+
+        function addTestimonial() {
+            alert('Add Testimonial functionality would open a modal or form');
+        }
+
+        function editTestimonial(id) {
+            alert(`Edit Testimonial ${id} functionality would open a modal or form`);
+        }
+
+        function deleteTestimonial(id) {
+            if(confirm('Are you sure you want to delete this testimonial?')) {
+                alert(`Testimonial ${id} would be deleted`);
+                loadTestimonials(); // Reload the list
+            }
+        }
+
+        // Form submissions
+        document.getElementById('settings-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Settings would be saved to content/settings.json');
+        });
+
+        document.getElementById('social-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Social links would be saved to content/settings.json');
+        });
+
+        // Initialize dashboard on load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update counts (in real implementation, these would be calculated from actual data)
+            updateDashboardCounts();
+        });
+
+        function updateDashboardCounts() {
+            // In real implementation, these would be calculated from JSON files
+            document.getElementById('products-count').textContent = '12';
+            document.getElementById('gallery-count').textContent = '8';
+            document.getElementById('testimonials-count').textContent = '5';
         }
     </script>
 </body>
