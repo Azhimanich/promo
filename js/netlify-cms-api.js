@@ -218,10 +218,23 @@ class NetlifyCMSAPI {
             }
         }));
         
+        // Trigger storage event for cross-tab sync
+        window.dispatchEvent(new StorageEvent('storage', {
+            key: 'cms_data_updated',
+            newValue: Date.now().toString()
+        }));
+        
         // Force refresh CMS Integration if available
         if (window.cmsIntegration) {
             window.cmsIntegration.refreshData();
         }
+        
+        // Force refresh CMS Sync Bridge if available
+        if (window.cmsSyncBridge) {
+            window.cmsSyncBridge.refreshFrontend();
+        }
+        
+        console.log('🔄 Frontend update notified');
     }
 
     async simulateFileSave(filename, data) {

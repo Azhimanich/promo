@@ -24,16 +24,38 @@ class CMSIntegration {
 
     async loadData() {
         try {
-            // Add cache busting untuk selalu dapat file terbaru
-            const timestamp = Date.now();
+            console.log('Loading CMS data...');
             
-            // Load main data file
-            const mainResponse = await fetch(`/content/data.json?t=${timestamp}`);
-            if (mainResponse.ok) {
-                this.data = await mainResponse.json();
-            } else {
-                throw new Error(`Main data file not found: ${mainResponse.status}`);
+            // Try CMS Data Sync first
+            if (window.loadCMSData) {
+                const data = window.loadCMSData('data.json');
+                if (data && Object.keys(data).length > 0) {
+                    this.data = data;
+                    console.log('✅ Data loaded from CMS Data Sync');
+                    return;
+                }
             }
+            
+            // Fallback to original file loading
+            await this.loadFromFiles();
+        } catch (error) {
+            console.error('Error loading CMS data:', error);
+            this.data = this.getDefaultData();
+        }
+    }
+
+    async loadFromFiles() {
+        // Add cache busting untuk selalu dapat file terbaru
+        const timestamp = Date.now();
+        
+        // Load main data file
+        const mainResponse = await fetch(`/content/data.json?t=${timestamp}`);
+        if (mainResponse.ok) {
+            this.data = await mainResponse.json();
+            console.log('✅ Main data loaded from files');
+        } else {
+            throw new Error(`Main data file not found: ${mainResponse.status}`);
+        }
 
             // Load products index
             try {
