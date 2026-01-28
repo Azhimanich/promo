@@ -1014,18 +1014,6 @@
       <script src="js/bootstrap.js"></script>
       <!-- custom js -->
       <script src="js/custom.js"></script>
-      <!-- CMS Integration -->
-      <script src="js/cms-integration.js"></script>
-      <!-- CMS Data Sync -->
-      <script src="js/cms-data-sync.js"></script>
-      <script src="js/cms-optimization.js"></script>
-      <script src="js/simple-cms-bridge.js"></script>
-      <script>
-        if (window.netlifyIdentity) {
-          window.netlifyIdentity.on("init", user => {
-            if (!user) {
-              window.netlifyIdentity.on("login", () => {
-                document.location.href = "/admin/simple.html";
               });
             }
           });
@@ -1050,7 +1038,7 @@
           window.netlifyIdentity.on('init', user => {
             const adminLink = document.querySelector('a[href="/admin/login.html"]');
             if (adminLink && user) {
-              adminLink.href = '/admin/simple.html';
+              adminLink.href = '/admin/';
               adminLink.textContent = '🛠️ Admin Panel';
             }
           });
