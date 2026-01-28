@@ -9,6 +9,15 @@
     <!-- Netlify Identity Widget -->
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     
+    <!-- Netlify CMS API Bridge -->
+    <script src="../js/netlify-cms-api.js"></script>
+    
+    <!-- Simple CMS Bridge -->
+    <script src="../js/simple-cms-bridge.js"></script>
+    
+    <!-- Simple Gallery -->
+    <script src="../js/simple-gallery.js"></script>
+    
     <!-- Media Upload Configuration -->
     <script>
         window.CMS_CONFIG = {
@@ -1775,10 +1784,9 @@
         // Load initial data
         window.addEventListener('load', async () => {
             try {
-                // Load pages data
-                const pagesResponse = await fetch('/content/index.json');
-                if (pagesResponse.ok) {
-                    const pagesData = await pagesResponse.json();
+                // Load pages data using Netlify CMS API
+                const pagesData = await window.loadCMSData('index.json');
+                if (pagesData) {
                     document.getElementById('hero_title').value = pagesData.hero_title || '';
                     document.getElementById('hero_subtitle').value = pagesData.hero_subtitle || '';
                     document.getElementById('hero_description').value = pagesData.hero_description || '';
@@ -1786,10 +1794,9 @@
                     document.getElementById('arrival_description').value = pagesData.arrival_description || '';
                 }
                 
-                // Load about data
-                const aboutResponse = await fetch('/content/about.json');
-                if (aboutResponse.ok) {
-                    const aboutData = await aboutResponse.json();
+                // Load about data using Netlify CMS API
+                const aboutData = await window.loadCMSData('about.json');
+                if (aboutData) {
                     document.getElementById('about-hero_title').value = aboutData.hero_title || '';
                     document.getElementById('about-hero_subtitle').value = aboutData.hero_subtitle || '';
                     document.getElementById('about-hero_description').value = aboutData.hero_description || '';
@@ -1800,36 +1807,13 @@
                     document.getElementById('story_content_3').value = aboutData.story_content_3 || '';
                     document.getElementById('gallery_title').value = aboutData.gallery_title || '';
                     document.getElementById('gallery_subtitle').value = aboutData.gallery_subtitle || '';
-                    if (aboutData.gallery_images && aboutData.gallery_images.length >= 12) {
-                        document.getElementById('gallery_image_1').value = aboutData.gallery_images[0] || '';
-                        document.getElementById('gallery_image_2').value = aboutData.gallery_images[1] || '';
-                        document.getElementById('gallery_image_3').value = aboutData.gallery_images[2] || '';
-                        document.getElementById('gallery_image_4').value = aboutData.gallery_images[3] || '';
-                        document.getElementById('gallery_image_5').value = aboutData.gallery_images[4] || '';
-                        document.getElementById('gallery_image_6').value = aboutData.gallery_images[5] || '';
-                        document.getElementById('gallery_image_7').value = aboutData.gallery_images[6] || '';
-                        document.getElementById('gallery_image_8').value = aboutData.gallery_images[7] || '';
-                        document.getElementById('gallery_image_9').value = aboutData.gallery_images[8] || '';
-                        document.getElementById('gallery_image_10').value = aboutData.gallery_images[9] || '';
-                        document.getElementById('gallery_image_11').value = aboutData.gallery_images[10] || '';
-                        document.getElementById('gallery_image_12').value = aboutData.gallery_images[11] || '';
-                    }
                     document.getElementById('cta_title').value = aboutData.cta_title || '';
                     document.getElementById('cta_description').value = aboutData.cta_description || '';
                 }
                 
-                // Load existing images
-                loadExistingImages();
-                
-                // Test image upload functionality
-                setTimeout(() => {
-                    testImageUpload();
-                }, 1000);
-                
-                // Load settings data
-                const settingsResponse = await fetch('/content/settings.json');
-                if (settingsResponse.ok) {
-                    const settingsData = await settingsResponse.json();
+                // Load settings data using Netlify CMS API
+                const settingsData = await window.loadCMSData('settings.json');
+                if (settingsData) {
                     document.getElementById('store_name').value = settingsData.store_name || '';
                     document.getElementById('store_description').value = settingsData.store_description || '';
                     document.getElementById('whatsapp_number').value = settingsData.whatsapp_number || '';
@@ -1843,32 +1827,22 @@
                     document.getElementById('email').value = settingsData.email || '';
                 }
                 
-                // Load testimonial data
-                const testimonialResponse = await fetch('/content/testimonial.json');
-                if (testimonialResponse.ok) {
-                    const testimonialData = await testimonialResponse.json();
-                    document.getElementById('page_title').value = testimonialData.page_title || '';
-                    document.getElementById('section_title').value = testimonialData.section_title || '';
-                    document.getElementById('inner_page_title').value = testimonialData.inner_page_title || '';
-                    
-                    if (testimonialData.testimonials && testimonialData.testimonials.length >= 3) {
-                        document.getElementById('testimonial_1_name').value = testimonialData.testimonials[0].name || '';
-                        document.getElementById('testimonial_1_role').value = testimonialData.testimonials[0].role || '';
-                        document.getElementById('testimonial_1_content').value = testimonialData.testimonials[0].content || '';
-                        
-                        document.getElementById('testimonial_2_name').value = testimonialData.testimonials[1].name || '';
-                        document.getElementById('testimonial_2_role').value = testimonialData.testimonials[1].role || '';
-                        document.getElementById('testimonial_2_content').value = testimonialData.testimonials[1].content || '';
-                        
-                        document.getElementById('testimonial_3_name').value = testimonialData.testimonials[2].name || '';
-                        document.getElementById('testimonial_3_role').value = testimonialData.testimonials[2].role || '';
-                        document.getElementById('testimonial_3_content').value = testimonialData.testimonials[2].content || '';
-                    }
-                }
+                console.log('✅ All data loaded successfully');
+                showMessage('✅ Admin panel loaded successfully', 'success');
+                
             } catch (error) {
-                console.log('Error loading initial data:', error);
+                console.error('Error loading initial data:', error);
+                showMessage('⚠️ Using default data (some features may be limited)', 'error');
             }
         });
+        
+        // Load existing images
+        loadExistingImages();
+        
+        // Test image upload functionality
+        setTimeout(() => {
+            testImageUpload();
+        }, 1000);
         
         // Authentication check for admin/simple.html
         if (window.netlifyIdentity) {
