@@ -15,6 +15,9 @@
     <!-- CMS Data Sync -->
     <script src="../js/cms-data-sync.js"></script>
     
+    <!-- CMS Persistence Fix -->
+    <script src="../js/cms-persistence-fix.js"></script>
+    
     <!-- Simple CMS Bridge -->
     <script src="../js/simple-cms-bridge.js"></script>
     
@@ -483,6 +486,9 @@
                     📥 Import Data
                 </button>
                 <input type="file" id="importFile" accept=".json" style="display: none;" onchange="handleImportData(event)">
+                <button onclick="fixCMSPersistence()" style="background: #e67e22; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600;">
+                    🔧 Fix Persistence
+                </button>
                 <button onclick="handleLogout()" style="background: #e74c3c; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600;">
                     🚪 Logout
                 </button>
