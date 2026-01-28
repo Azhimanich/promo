@@ -156,11 +156,27 @@ class NetlifyCMSAPI {
 
     async savePagesData(data) {
         try {
+            // Save pages data to data.json
+            const currentData = window.loadCMSData('data.json') || {};
+            const updatedData = {
+                ...currentData,
+                pages: {
+                    ...currentData.pages,
+                    index: {
+                        hero_title: data.hero_title || '',
+                        hero_subtitle: data.hero_subtitle || '',
+                        hero_description: data.hero_description || '',
+                        arrival_title: data.arrival_title || '',
+                        arrival_description: data.arrival_description || ''
+                    }
+                }
+            };
+            
             // Save using CMS Data Sync for persistence
-            window.saveCMSData('index.json', data);
+            window.saveCMSData('data.json', updatedData);
             
             showMessage('✅ Pages saved successfully!', 'success');
-            console.log('Pages data saved:', data);
+            console.log('Pages data saved:', updatedData);
             
             // Trigger frontend update
             setTimeout(() => {

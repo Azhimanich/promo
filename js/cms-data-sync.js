@@ -50,7 +50,7 @@ class CMSDataSync {
             pages: {
                 index: {
                     hero_title: "Sale 20% Off",
-                    hero_subtitle: "On Everything",
+                    hero_subtitle: "On Everything", 
                     hero_description: "Explicabo esse amet tempora quibusdam laudantium, laborum eaque magnam fugiat hic? Esse dicta aliquid error repudiandae earum suscipit fugiat molestias, veniam, vel architecto veritatis delectus repellat modi impedit sequi.",
                     arrival_title: "#NewArrivals",
                     arrival_description: "Vitae fugiat laboriosam officia perferendis provident aliquid voluptatibus dolorem, fugit ullam sit earum id eaque nisi hic? Tenetur commodi, nisi rem vel, ea eaque ab ipsa, autem similique ex unde!"
@@ -408,6 +408,13 @@ class CMSDataSync {
     saveData(filename, data) {
         // Save ke localStorage
         localStorage.setItem(`cms_${filename}`, JSON.stringify(data));
+        
+        // Special handling for data.json - merge with existing data
+        if (filename === 'data.json') {
+            const existingData = this.loadData(filename);
+            const mergedData = { ...existingData, ...data };
+            localStorage.setItem(`cms_${filename}`, JSON.stringify(mergedData));
+        }
         
         // Trigger sync event
         window.dispatchEvent(new CustomEvent('cms-data-changed', {

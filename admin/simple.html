@@ -1796,14 +1796,18 @@
         // Load initial data
         window.addEventListener('load', async () => {
             try {
-                // Load pages data using Netlify CMS API
-                const pagesData = await window.loadCMSData('index.json');
-                if (pagesData) {
+                // Load pages data using CMS Data Sync
+                const data = window.loadCMSData('data.json');
+                if (data && data.pages && data.pages.index) {
+                    const pagesData = data.pages.index;
                     document.getElementById('hero_title').value = pagesData.hero_title || '';
                     document.getElementById('hero_subtitle').value = pagesData.hero_subtitle || '';
                     document.getElementById('hero_description').value = pagesData.hero_description || '';
                     document.getElementById('arrival_title').value = pagesData.arrival_title || '';
                     document.getElementById('arrival_description').value = pagesData.arrival_description || '';
+                    console.log('✅ Pages data loaded from data.json');
+                } else {
+                    console.log('⚠️ Pages data not found in data.json');
                 }
                 
                 // Load about data using Netlify CMS API
