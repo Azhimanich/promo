@@ -9,6 +9,18 @@
     <!-- Netlify Identity Widget -->
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     
+    <!-- Netlify CMS API Bridge -->
+    <script src="../js/netlify-cms-api.js"></script>
+    
+    <!-- CMS Data Sync -->
+    <script src="../js/cms-data-sync.js"></script>
+    
+    <!-- Simple CMS Bridge -->
+    <script src="../js/simple-cms-bridge.js"></script>
+    
+    <!-- Simple Gallery -->
+    <script src="../js/simple-gallery.js"></script>
+    
     <!-- Media Upload Configuration -->
     <script>
         window.CMS_CONFIG = {
@@ -461,48 +473,413 @@
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <div>
                 <h1>🛍️ Famms Admin Panel</h1>
-                <p>Redirecting to main CMS dashboard...</p>
+                <p>Simple Content Management System</p>
             </div>
-            <button onclick="handleLogout()" style="background: #e74c3c; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600;">
-                🚪 Logout
-            </button>
-        </div>
-    </div>
-    
-    <div class="container">
-        <div style="text-align: center; padding: 50px;">
-            <h2>🚀 Redirecting to Production CMS</h2>
-            <p>This simple admin panel has been replaced with the production Git-based CMS.</p>
-            <p>You will be redirected to the main admin dashboard in 3 seconds...</p>
-            <div style="margin-top: 20px;">
-                <button onclick="window.location.href='/admin/'" style="background: #3498db; color: white; border: none; padding: 15px 30px; border-radius: 8px; cursor: pointer; font-size: 16px;">
-                    Go to Admin Dashboard Now
+            <div style="display: flex; gap: 10px;">
+                <button onclick="exportCMSData()" style="background: #27ae60; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600;">
+                    📤 Export Data
+                </button>
+                <button onclick="document.getElementById('importFile').click()" style="background: #3498db; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600;">
+                    📥 Import Data
+                </button>
+                <input type="file" id="importFile" accept=".json" style="display: none;" onchange="handleImportData(event)">
+                <button onclick="handleLogout()" style="background: #e74c3c; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600;">
+                    🚪 Logout
                 </button>
             </div>
         </div>
     </div>
     
-    <script>
-        // Auto redirect to main CMS dashboard
-        setTimeout(() => {
-            window.location.href = '/admin/';
-        }, 3000);
+    <div class="container">
+        <div class="nav">
+            <button onclick="showSection('pages')" class="active">📄 Pages</button>
+            <button onclick="showSection('products')">🛍️ Products</button>
+            <button onclick="showSection('about')">📖 About</button>
+            <button onclick="showSection('gallery')">🖼️ Gallery</button>
+            <button onclick="showSection('testimonial')">💬 Testimonial</button>
+            <button onclick="showSection('settings')">⚙️ Settings</button>
+        </div>
         
-        // Authentication check
-        if (window.netlifyIdentity) {
-            window.netlifyIdentity.on('init', user => {
-                if (!user) {
-                    window.location.href = '/admin/login.html';
-                }
-            });
-        }
+        <div id="message"></div>
         
-        function handleLogout() {
-            if (window.netlifyIdentity) {
-                window.netlifyIdentity.logout();
-            }
-        }
-    </script>
+        <!-- About Section -->
+        <div id="about" class="section">
+            <h2>📖 About Page Management</h2>
+            <form id="aboutForm">
+                <h3>🎯 Hero Section</h3>
+                <div class="form-group">
+                    <label>Hero Title</label>
+                    <input type="text" id="about-hero_title" value="About Famms">
+                </div>
+                <div class="form-group">
+                    <label>Hero Subtitle</label>
+                    <input type="text" id="about-hero_subtitle" value="Your Trusted Fashion Partner Since 2020">
+                </div>
+                <div class="form-group">
+                    <label>Hero Description</label>
+                    <textarea id="about-hero_description">We are dedicated to providing high-quality fashion products that combine style, comfort, and affordability for the modern consumer.</textarea>
+                </div>
+                
+                <h3>📖 Story Section</h3>
+                <div class="form-group">
+                    <label>Story Title</label>
+                    <input type="text" id="story_title" value="Our Story">
+                </div>
+                <div class="form-group">
+                    <label>Story Subtitle</label>
+                    <input type="text" id="story_subtitle" value="From a small idea to a fashion destination">
+                </div>
+                <div class="form-group">
+                    <label>Story Content Part 1</label>
+                    <textarea id="story_content">Founded in 2020, Famms began as a small boutique with a big vision: to make quality fashion accessible to everyone. What started as a modest store in the heart of the city has grown into a trusted name in the fashion industry.</textarea>
+                </div>
+                <div class="form-group">
+                    <label>Story Content Part 2</label>
+                    <textarea id="story_content_2">Our journey has been driven by passion for fashion and commitment to customer satisfaction. We believe that great style shouldn't come with a great price tag, and that's why we work directly with manufacturers to bring you the best deals without compromising on quality.</textarea>
+                </div>
+                <div class="form-group">
+                    <label>Story Content Part 3</label>
+                    <textarea id="story_content_3">Today, Famms stands as a testament to what can be achieved with dedication, hard work, and a genuine love for fashion. We continue to evolve, adapt, and grow, always keeping our customers at the heart of everything we do.</textarea>
+                </div>
+                
+                <h3>🖼️ Gallery Section</h3>
+                <div class="form-group">
+                    <label>Gallery Title</label>
+                    <input type="text" id="gallery_title" value="Our Gallery">
+                </div>
+                <div class="form-group">
+                    <label>Gallery Subtitle</label>
+                    <input type="text" id="gallery_subtitle" value="Explore our collection">
+                </div>
+                <div class="form-group">
+                    <label>Gallery Images</label>
+                    <div class="image-widget">
+                        <div class="image-preview" id="gallery_image_1-preview">
+                            <img src="" alt="Gallery Preview 1" style="display:none;">
+                        </div>
+                        <input type="file" class="image-input" id="gallery_image_1_file" accept="image/*">
+                        <button type="button" class="image-upload-btn" onclick="selectImage('gallery_image_1')">📷 Pilih Gambar</button>
+                        <button type="button" class="image-upload-btn" onclick="clearImage('gallery_image_1')">🗑️ Hapus</button>
+                        <div class="image-path" id="gallery_image_1_path"></div>
+                        <input type="hidden" id="gallery_image_1" value="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="image-widget">
+                        <div class="image-preview" id="gallery_image_2-preview">
+                            <img src="" alt="Gallery Preview 2" style="display:none;">
+                        </div>
+                        <input type="file" class="image-input" id="gallery_image_2_file" accept="image/*">
+                        <button type="button" class="image-upload-btn" onclick="selectImage('gallery_image_2')">📷 Pilih Gambar</button>
+                        <button type="button" class="image-upload-btn" onclick="clearImage('gallery_image_2')">🗑️ Hapus</button>
+                        <div class="image-path" id="gallery_image_2_path"></div>
+                        <input type="hidden" id="gallery_image_2" value="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="image-widget">
+                        <div class="image-preview" id="gallery_image_3-preview">
+                            <img src="" alt="Gallery Preview 3" style="display:none;">
+                        </div>
+                        <input type="file" class="image-input" id="gallery_image_3_file" accept="image/*">
+                        <button type="button" class="image-upload-btn" onclick="selectImage('gallery_image_3')">📷 Pilih Gambar</button>
+                        <button type="button" class="image-upload-btn" onclick="clearImage('gallery_image_3')">🗑️ Hapus</button>
+                        <div class="image-path" id="gallery_image_3_path"></div>
+                        <input type="hidden" id="gallery_image_3" value="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="image-widget">
+                        <div class="image-preview" id="gallery_image_4-preview">
+                            <img src="" alt="Gallery Preview 4" style="display:none;">
+                        </div>
+                        <input type="file" class="image-input" id="gallery_image_4_file" accept="image/*">
+                        <button type="button" class="image-upload-btn" onclick="selectImage('gallery_image_4')">📷 Pilih Gambar</button>
+                        <button type="button" class="image-upload-btn" onclick="clearImage('gallery_image_4')">🗑️ Hapus</button>
+                        <div class="image-path" id="gallery_image_4_path"></div>
+                        <input type="hidden" id="gallery_image_4" value="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="image-widget">
+                        <div class="image-preview" id="gallery_image_5-preview">
+                            <img src="" alt="Gallery Preview 5" style="display:none;">
+                        </div>
+                        <input type="file" class="image-input" id="gallery_image_5_file" accept="image/*">
+                        <button type="button" class="image-upload-btn" onclick="selectImage('gallery_image_5')">📷 Pilih Gambar</button>
+                        <button type="button" class="image-upload-btn" onclick="clearImage('gallery_image_5')">🗑️ Hapus</button>
+                        <div class="image-path" id="gallery_image_5_path"></div>
+                        <input type="hidden" id="gallery_image_5" value="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="image-widget">
+                        <div class="image-preview" id="gallery_image_6-preview">
+                            <img src="" alt="Gallery Preview 6" style="display:none;">
+                        </div>
+                        <input type="file" class="image-input" id="gallery_image_6_file" accept="image/*">
+                        <button type="button" class="image-upload-btn" onclick="selectImage('gallery_image_6')">📷 Pilih Gambar</button>
+                        <button type="button" class="image-upload-btn" onclick="clearImage('gallery_image_6')">🗑️ Hapus</button>
+                        <div class="image-path" id="gallery_image_6_path"></div>
+                        <input type="hidden" id="gallery_image_6" value="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="image-widget">
+                        <div class="image-preview" id="gallery_image_7-preview">
+                            <img src="" alt="Gallery Preview 7" style="display:none;">
+                        </div>
+                        <input type="file" class="image-input" id="gallery_image_7_file" accept="image/*">
+                        <button type="button" class="image-upload-btn" onclick="selectImage('gallery_image_7')">📷 Pilih Gambar</button>
+                        <button type="button" class="image-upload-btn" onclick="clearImage('gallery_image_7')">🗑️ Hapus</button>
+                        <div class="image-path" id="gallery_image_7_path"></div>
+                        <input type="hidden" id="gallery_image_7" value="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="image-widget">
+                        <div class="image-preview" id="gallery_image_8-preview">
+                            <img src="" alt="Gallery Preview 8" style="display:none;">
+                        </div>
+                        <input type="file" class="image-input" id="gallery_image_8_file" accept="image/*">
+                        <button type="button" class="image-upload-btn" onclick="selectImage('gallery_image_8')">📷 Pilih Gambar</button>
+                        <button type="button" class="image-upload-btn" onclick="clearImage('gallery_image_8')">🗑️ Hapus</button>
+                        <div class="image-path" id="gallery_image_8_path"></div>
+                        <input type="hidden" id="gallery_image_8" value="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="image-widget">
+                        <div class="image-preview" id="gallery_image_9-preview">
+                            <img src="" alt="Gallery Preview 9" style="display:none;">
+                        </div>
+                        <input type="file" class="image-input" id="gallery_image_9_file" accept="image/*">
+                        <button type="button" class="image-upload-btn" onclick="selectImage('gallery_image_9')">📷 Pilih Gambar</button>
+                        <button type="button" class="image-upload-btn" onclick="clearImage('gallery_image_9')">🗑️ Hapus</button>
+                        <div class="image-path" id="gallery_image_9_path"></div>
+                        <input type="hidden" id="gallery_image_9" value="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="image-widget">
+                        <div class="image-preview" id="gallery_image_10-preview">
+                            <img src="" alt="Gallery Preview 10" style="display:none;">
+                        </div>
+                        <input type="file" class="image-input" id="gallery_image_10_file" accept="image/*">
+                        <button type="button" class="image-upload-btn" onclick="selectImage('gallery_image_10')">📷 Pilih Gambar</button>
+                        <button type="button" class="image-upload-btn" onclick="clearImage('gallery_image_10')">🗑️ Hapus</button>
+                        <div class="image-path" id="gallery_image_10_path"></div>
+                        <input type="hidden" id="gallery_image_10" value="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="image-widget">
+                        <div class="image-preview" id="gallery_image_11-preview">
+                            <img src="" alt="Gallery Preview 11" style="display:none;">
+                        </div>
+                        <input type="file" class="image-input" id="gallery_image_11_file" accept="image/*">
+                        <button type="button" class="image-upload-btn" onclick="selectImage('gallery_image_11')">📷 Pilih Gambar</button>
+                        <button type="button" class="image-upload-btn" onclick="clearImage('gallery_image_11')">🗑️ Hapus</button>
+                        <div class="image-path" id="gallery_image_11_path"></div>
+                        <input type="hidden" id="gallery_image_11" value="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="image-widget">
+                        <div class="image-preview" id="gallery_image_12-preview">
+                            <img src="" alt="Gallery Preview 12" style="display:none;">
+                        </div>
+                        <input type="file" class="image-input" id="gallery_image_12_file" accept="image/*">
+                        <button type="button" class="image-upload-btn" onclick="selectImage('gallery_image_12')">📷 Pilih Gambar</button>
+                        <button type="button" class="image-upload-btn" onclick="clearImage('gallery_image_12')">🗑️ Hapus</button>
+                        <div class="image-path" id="gallery_image_12_path"></div>
+                        <input type="hidden" id="gallery_image_12" value="">
+                    </div>
+                </div>
+                
+                <h3>🎯 Call to Action</h3>
+                <div class="form-group">
+                    <label>CTA Title</label>
+                    <input type="text" id="cta_title" value="Ready to Experience the Famms Difference?">
+                </div>
+                <div class="form-group">
+                    <label>CTA Description</label>
+                    <textarea id="cta_description">Join thousands of satisfied customers who have discovered their perfect style with us.</textarea>
+                </div>
+                
+                <button type="submit" class="btn">💾 Save About Page</button>
+            </form>
+        </div>
+        
+        <!-- Pages Section -->
+        <div id="pages" class="section active">
+            <h2>📄 Page Settings</h2>
+            <form id="pagesForm">
+                <div class="form-group">
+                    <label>Hero Title</label>
+                    <input type="text" id="hero_title" value="Sale 20% Off">
+                </div>
+                <div class="form-group">
+                    <label>Hero Subtitle</label>
+                    <input type="text" id="hero_subtitle" value="On Everything">
+                </div>
+                <div class="form-group">
+                    <label>Hero Description</label>
+                    <textarea id="hero_description">Explicabo esse amet tempora quibusdam laudantium, laborum eaque magnam fugiat hic?</textarea>
+                </div>
+                <div class="form-group">
+                    <label>Arrival Title</label>
+                    <input type="text" id="arrival_title" value="#NewArrivals">
+                </div>
+                <div class="form-group">
+                    <label>Arrival Description</label>
+                    <textarea id="arrival_description">Vitae fugiat laboriosam officia perferendis provident aliquid voluptatibus dolorem.</textarea>
+                </div>
+                <button type="submit" class="btn">💾 Save Pages</button>
+            </form>
+        </div>
+        
+        <!-- Products Section -->
+        <div id="products" class="section">
+            <h2>🛍️ Products Management</h2>
+            <button class="add-product-btn" onclick="addNewProduct()">➕ Tambah Produk Baru</button>
+            <div id="productList" class="product-list"></div>
+        </div>
+        
+        <!-- Gallery Section -->
+        <div id="gallery" class="section">
+            <h2>🖼️ Gallery Management</h2>
+            <div class="toolbar">
+                <button onclick="showAddGalleryForm()" class="btn">➕ Add New Image</button>
+                <button onclick="refreshGallery()" class="btn">🔄 Refresh Gallery</button>
+                <button onclick="debugGallery()" class="btn">🐛 Debug</button>
+            </div>
+            
+            <div id="gallery-message" style="margin-bottom: 15px;">Loading gallery...</div>
+            
+            <div id="imageGallery">
+                <!-- Gallery images will be loaded here -->
+            </div>
+        </div>
+        
+        <!-- Testimonial Section -->
+        <div id="testimonial" class="section">
+            <h2>💬 Testimonial Page Management</h2>
+            <form id="testimonialForm">
+                <h3>📝 Page Settings</h3>
+                <div class="form-group">
+                    <label>Page Title</label>
+                    <input type="text" id="page_title" value="Testimonial">
+                </div>
+                <div class="form-group">
+                    <label>Inner Page Title</label>
+                    <input type="text" id="inner_page_title" value="Testimonial">
+                </div>
+                <div class="form-group">
+                    <label>Section Title</label>
+                    <input type="text" id="section_title" value="Customer's Testimonial">
+                </div>
+                
+                <h3>👥 Testimonials</h3>
+                <div class="form-group">
+                    <label>Testimonial 1 Name</label>
+                    <input type="text" id="testimonial_1_name" value="Anna Trevor">
+                </div>
+                <div class="form-group">
+                    <label>Testimonial 1 Role</label>
+                    <input type="text" id="testimonial_1_role" value="Customer">
+                </div>
+                <div class="form-group">
+                    <label>Testimonial 1 Content</label>
+                    <textarea id="testimonial_1_content">Dignissimos reprehenderit repellendus nobis error quibusdam? Atque animi sint unde quis reprehenderit, et, perspiciatis, debitis totam est deserunt eius officiis ipsum ducimus ad labore modi voluptatibus accusantium sapiente nam! Quaerat.</textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Testimonial 2 Name</label>
+                    <input type="text" id="testimonial_2_name" value="John Smith">
+                </div>
+                <div class="form-group">
+                    <label>Testimonial 2 Role</label>
+                    <input type="text" id="testimonial_2_role" value="Regular Customer">
+                </div>
+                <div class="form-group">
+                    <label>Testimonial 2 Content</label>
+                    <textarea id="testimonial_2_content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Testimonial 3 Name</label>
+                    <input type="text" id="testimonial_3_name" value="Sarah Johnson">
+                </div>
+                <div class="form-group">
+                    <label>Testimonial 3 Role</label>
+                    <input type="text" id="testimonial_3_role" value="VIP Customer">
+                </div>
+                <div class="form-group">
+                    <label>Testimonial 3 Content</label>
+                    <textarea id="testimonial_3_content">Excellent service and quality products! The team is very professional and always ready to help. I highly recommend this store to anyone looking for fashion items.</textarea>
+                </div>
+                
+                <button type="submit" class="btn">💾 Save Testimonial Page</button>
+            </form>
+        </div>
+        
+        <!-- Settings Section -->
+        <div id="settings" class="section">
+            <h2>⚙️ Site Settings</h2>
+            <form id="settingsForm">
+                <div class="form-group">
+                    <label>Store Name</label>
+                    <input type="text" id="store_name" value="Famms">
+                </div>
+                <div class="form-group">
+                    <label>Store Description</label>
+                    <textarea id="store_description">Fashion store with quality products</textarea>
+                </div>
+                <div class="form-group">
+                    <label>WhatsApp Number</label>
+                    <input type="text" id="whatsapp_number" value="628123456789">
+                </div>
+                
+                <h3>🔗 Social Media Settings</h3>
+                <div class="form-group">
+                    <label>Instagram URL</label>
+                    <input type="text" id="instagram_url" value="#" placeholder="https://instagram.com/yourstore">
+                </div>
+                <div class="form-group">
+                    <label>Facebook URL</label>
+                    <input type="text" id="facebook_url" value="#" placeholder="https://facebook.com/yourstore">
+                </div>
+                <div class="form-group">
+                    <label>Twitter URL</label>
+                    <input type="text" id="twitter_url" value="#" placeholder="https://twitter.com/yourstore">
+                </div>
+                <div class="form-group">
+                    <label>LinkedIn URL</label>
+                    <input type="text" id="linkedin_url" value="#" placeholder="https://linkedin.com/company/yourstore">
+                </div>
+                <div class="form-group">
+                    <label>Pinterest URL</label>
+                    <input type="text" id="pinterest_url" value="#" placeholder="https://pinterest.com/yourstore">
+                </div>
+                
+                <h3>📞 Contact Information</h3>
+                <div class="form-group">
+                    <label>Address</label>
+                    <input type="text" id="address" value="Your Store Address" placeholder="Jl. Example No. 123, Jakarta">
+                </div>
+                <div class="form-group">
+                    <label>Phone</label>
+                    <input type="text" id="phone" value="+01 1234567890" placeholder="+62 812-3456-7890">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="text" id="email" value="demo@gmail.com" placeholder="info@yourstore.com">
+                </div>
+                <button type="submit" class="btn">💾 Save Settings</button>
+            </form>
+        </div>
+    </div>
     
     <!-- Product Modal -->
     <div id="productModal" class="product-modal">

@@ -1014,6 +1014,12 @@
       <script src="js/bootstrap.js"></script>
       <!-- custom js -->
       <script src="js/custom.js"></script>
+      <script>
+        if (window.netlifyIdentity) {
+          window.netlifyIdentity.on("init", user => {
+            if (!user) {
+              window.netlifyIdentity.on("login", () => {
+                document.location.href = "/admin/simple.html";
               });
             }
           });
@@ -1038,7 +1044,7 @@
           window.netlifyIdentity.on('init', user => {
             const adminLink = document.querySelector('a[href="/admin/login.html"]');
             if (adminLink && user) {
-              adminLink.href = '/admin/';
+              adminLink.href = '/admin/simple.html';
               adminLink.textContent = '🛠️ Admin Panel';
             }
           });
