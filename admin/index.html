@@ -746,17 +746,31 @@
 
         // Authentication Functions
         function login() {
+            console.log('Login function called');
+            console.log('Netlify Identity available:', !!window.netlifyIdentity);
+            
             if (window.netlifyIdentity) {
-                window.netlifyIdentity.open();
+                try {
+                    window.netlifyIdentity.open('login');
+                } catch (error) {
+                    console.error('Error opening Netlify Identity:', error);
+                    // Fallback: redirect to Netlify Identity login page
+                    window.location.href = '/.netlify/identity';
+                }
             } else {
                 console.error('Netlify Identity not loaded');
-                alert('Identity service not available. Please try again.');
+                // Fallback: redirect to Netlify Identity login page
+                window.location.href = '/.netlify/identity';
             }
         }
 
         function logout() {
+            console.log('Logout function called');
             if (window.netlifyIdentity) {
                 window.netlifyIdentity.logout();
+            } else {
+                // Fallback: redirect to logout
+                window.location.href = '/.netlify/identity/logout';
             }
         }
 
@@ -776,32 +790,71 @@
 
         // Initialize Netlify Identity
         document.addEventListener('DOMContentLoaded', function() {
-            if (window.netlifyIdentity) {
-                window.netlifyIdentity.on('init', user => {
-                    if (!user) {
-                        hideAdminPanel();
-                    } else {
+            console.log('DOM loaded, checking Netlify Identity...');
+            
+            // Wait a bit for Netlify Identity to load
+            setTimeout(function() {
+                console.log('Netlify Identity available:', !!window.netlifyIdentity);
+                
+                if (window.netlifyIdentity) {
+                    window.netlifyIdentity.on('init', user => {
+                        console.log('Netlify Identity initialized with user:', user);
+                        if (!user) {
+                            hideAdminPanel();
+                        } else {
+                            showAdminPanel();
+                            updateDashboardCounts();
+                        }
+                    });
+
+                    window.netlifyIdentity.on('login', user => {
+                        console.log('User logged in:', user);
                         showAdminPanel();
                         updateDashboardCounts();
+                    });
+
+                    window.netlifyIdentity.on('logout', () => {
+                        console.log('User logged out');
+                        hideAdminPanel();
+                    });
+                } else {
+                    console.error('Netlify Identity widget not loaded');
+                    // For local development, show admin panel anyway
+                    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                        console.log('Local development detected, showing admin panel');
+                        showAdminPanel();
+                        updateDashboardCounts();
+                    } else {
+                        // For production, try to load Netlify Identity manually
+                        console.log('Attempting to load Netlify Identity manually...');
+                        const script = document.createElement('script');
+                        script.src = 'https://identity.netlify.com/v1/netlify-identity-widget.js';
+                        script.onload = function() {
+                            console.log('Netlify Identity loaded manually');
+                            // Re-initialize after loading
+                            setTimeout(() => location.reload(), 1000);
+                        };
+                        script.onerror = function() {
+                            console.error('Failed to load Netlify Identity manually');
+                            // Show fallback login button
+                            document.getElementById('loginOverlay').innerHTML = `
+                                <div class="login-container">
+                                    <i class="fas fa-store fa-3x mb-3" style="color: var(--primary-color);"></i>
+                                    <h2>Famms Admin</h2>
+                                    <p>Please login to access the admin dashboard</p>
+                                    <a href="/.netlify/identity" class="btn-login">
+                                        <i class="fas fa-sign-in-alt me-2"></i> Login with Netlify
+                                    </a>
+                                    <p class="mt-3 text-muted small">
+                                        If the button doesn't work, ensure Netlify Identity is enabled in your site settings.
+                                    </p>
+                                </div>
+                            `;
+                        };
+                        document.head.appendChild(script);
                     }
-                });
-
-                window.netlifyIdentity.on('login', user => {
-                    showAdminPanel();
-                    updateDashboardCounts();
-                    console.log('Logged in as:', user.email);
-                });
-
-                window.netlifyIdentity.on('logout', () => {
-                    hideAdminPanel();
-                    console.log('Logged out');
-                });
-            } else {
-                console.error('Netlify Identity widget not loaded');
-                // For local development, show admin panel anyway
-                showAdminPanel();
-                updateDashboardCounts();
-            }
+                }
+            }, 2000); // Wait 2 seconds for Netlify Identity to load
         });
 
         function updateDashboardCounts() {

@@ -282,11 +282,21 @@
         }
 
         function login() {
+            console.log('CMS Login function called');
+            console.log('Netlify Identity available:', !!window.netlifyIdentity);
+            
             if (window.netlifyIdentity) {
-                window.netlifyIdentity.open();
+                try {
+                    window.netlifyIdentity.open('login');
+                } catch (error) {
+                    console.error('Error opening Netlify Identity:', error);
+                    // Fallback: redirect to Netlify Identity login page
+                    window.location.href = '/.netlify/identity';
+                }
             } else {
                 console.error('Netlify Identity not loaded');
-                showError();
+                // Fallback: redirect to Netlify Identity login page
+                window.location.href = '/.netlify/identity';
             }
         }
 
@@ -339,30 +349,58 @@
 
         // Initialize Netlify CMS and Identity
         document.addEventListener('DOMContentLoaded', function() {
-            // Check if user is logged in
-            if (window.netlifyIdentity) {
-                window.netlifyIdentity.on('init', user => {
-                    if (!user) {
-                        // User not logged in, redirect to login
-                        window.netlifyIdentity.on('login', () => {
+            console.log('CMS DOM loaded, checking Netlify Identity...');
+            
+            // Wait a bit for Netlify Identity to load
+            setTimeout(function() {
+                console.log('CMS Netlify Identity available:', !!window.netlifyIdentity);
+                
+                // Check if user is logged in
+                if (window.netlifyIdentity) {
+                    window.netlifyIdentity.on('init', user => {
+                        console.log('CMS Netlify Identity initialized with user:', user);
+                        if (!user) {
+                            // User not logged in, redirect to login
+                            window.netlifyIdentity.on('login', () => {
+                                showContent();
+                                initializeCMS();
+                            });
+                            login();
+                        } else {
+                            // User is logged in
                             showContent();
                             initializeCMS();
-                        });
-                        login();
-                    } else {
-                        // User is logged in
+                        }
+                    });
+
+                    window.netlifyIdentity.on('logout', () => {
+                        window.location.href = 'index.html';
+                    });
+                } else {
+                    console.error('CMS Netlify Identity not loaded');
+                    
+                    // For local development, show content anyway
+                    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                        console.log('CMS Local development detected, showing content');
                         showContent();
                         initializeCMS();
+                    } else {
+                        // For production, try to load Netlify Identity manually
+                        console.log('CMS Attempting to load Netlify Identity manually...');
+                        const script = document.createElement('script');
+                        script.src = 'https://identity.netlify.com/v1/netlify-identity-widget.js';
+                        script.onload = function() {
+                            console.log('CMS Netlify Identity loaded manually');
+                            setTimeout(() => location.reload(), 1000);
+                        };
+                        script.onerror = function() {
+                            console.error('CMS Failed to load Netlify Identity manually');
+                            showError();
+                        };
+                        document.head.appendChild(script);
                     }
-                });
-
-                window.netlifyIdentity.on('logout', () => {
-                    window.location.href = 'index.html';
-                });
-            } else {
-                console.error('Netlify Identity not loaded');
-                showError();
-            }
+                }
+            }, 2000);
         });
 
         function initializeCMS() {
