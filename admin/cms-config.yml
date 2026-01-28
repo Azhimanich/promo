@@ -1,0 +1,139 @@
+backend:
+  name: git-gateway
+  branch: main
+
+publish_mode: editorial_workflow
+media_folder: "images/uploads"
+public_folder: "/images/uploads"
+
+site_url: "https://promo200.netlify.app"
+display_url: "https://promo200.netlify.app"
+
+logo_url: "/images/logo.png"
+
+slug:
+  encoding: "ascii"
+  clean_accents: true
+  sanitize_replacement: "-"
+
+collections:
+  # Home Page Settings
+  - name: "homepage"
+    label: "Home Page"
+    files:
+      - name: "index"
+        label: "Home Page Settings"
+        file: "content/index.json"
+        fields:
+          - { label: "Hero Title", name: "hero_title", widget: "string", default: "Sale 20% Off" }
+          - { label: "Hero Subtitle", name: "hero_subtitle", widget: "string", default: "On Everything" }
+          - { label: "Hero Description", name: "hero_description", widget: "text", default: "Special offer on all products" }
+          - { label: "Hero Button Text", name: "hero_button_text", widget: "string", default: "Shop Now" }
+          - { label: "Hero Button Link", name: "hero_button_link", widget: "string", default: "#products" }
+          - { label: "Arrival Title", name: "arrival_title", widget: "string", default: "#NewArrivals" }
+          - { label: "Arrival Description", name: "arrival_description", widget: "text", default: "Check out our latest collection" }
+          - { label: "Arrival Button Text", name: "arrival_button_text", widget: "string", default: "Shop Now" }
+          - { label: "Arrival Button Link", name: "arrival_button_link", widget: "string", default: "#products" }
+
+  # About Page Settings
+  - name: "about"
+    label: "About Page"
+    files:
+      - name: "about"
+        label: "About Page Settings"
+        file: "content/about.json"
+        fields:
+          - { label: "Hero Title", name: "hero_title", widget: "string", default: "About Famms" }
+          - { label: "Hero Subtitle", name: "hero_subtitle", widget: "string", default: "Your Trusted Fashion Partner" }
+          - { label: "Hero Description", name: "hero_description", widget: "text", default: "We are dedicated to providing high-quality fashion products" }
+          - { label: "Story Title", name: "story_title", widget: "string", default: "Our Story" }
+          - { label: "Story Subtitle", name: "story_subtitle", widget: "string", default: "From a small idea to a fashion destination" }
+          - { label: "Story Content", name: "story_content", widget: "text", default: "Founded in 2020, Famms began as a small boutique" }
+          - { label: "Story Content 2", name: "story_content_2", widget: "text", default: "Our journey has been driven by passion for fashion" }
+          - { label: "Story Content 3", name: "story_content_3", widget: "text", default: "Today, Famms stands as a testament to dedication" }
+          - { label: "Story Image", name: "story_image", widget: "image", default: "images/about-story.jpg" }
+          - { label: "Gallery Title", name: "gallery_title", widget: "string", default: "Our Gallery" }
+          - { label: "Gallery Subtitle", name: "gallery_subtitle", widget: "string", default: "Explore our collection" }
+          - { label: "Gallery Images", name: "gallery_images", widget: "list", field: { label: "Image", name: "image", widget: "image", required: false } }
+          - { label: "CTA Title", name: "cta_title", widget: "string", default: "Ready to Experience the Famms Difference?" }
+          - { label: "CTA Description", name: "cta_description", widget: "text", default: "Join thousands of satisfied customers" }
+
+  # Contact Page Settings
+  - name: "contact"
+    label: "Contact Page"
+    files:
+      - name: "contact"
+        label: "Contact Page Settings"
+        file: "content/contact.json"
+        fields:
+          - { label: "Page Title", name: "page_title", widget: "string", default: "Contact Us" }
+          - { label: "Page Description", name: "page_description", widget: "text", default: "Get in touch with us" }
+          - { label: "Form Title", name: "form_title", widget: "string", default: "Send us a message" }
+          - { label: "Name Placeholder", name: "name_placeholder", widget: "string", default: "Enter your full name" }
+          - { label: "Email Placeholder", name: "email_placeholder", widget: "string", default: "Enter your email" }
+          - { label: "Subject Placeholder", name: "subject_placeholder", widget: "string", default: "Enter subject" }
+          - { label: "Message Placeholder", name: "message_placeholder", widget: "text", default: "Enter your message" }
+          - { label: "Submit Button Text", name: "submit_text", widget: "string", default: "Send Message" }
+
+  # Site Settings
+  - name: "settings"
+    label: "Site Settings"
+    files:
+      - name: "settings"
+        label: "General Settings"
+        file: "content/settings.json"
+        fields:
+          - { label: "Store Name", name: "store_name", widget: "string", default: "Famms" }
+          - { label: "Store Description", name: "store_description", widget: "text", required: false }
+          - { label: "WhatsApp Number", name: "whatsapp_number", widget: "string", default: "+6281234567890" }
+          - { label: "Instagram URL", name: "instagram_url", widget: "string", default: "#" }
+          - { label: "Facebook URL", name: "facebook_url", widget: "string", default: "#" }
+          - { label: "Twitter URL", name: "twitter_url", widget: "string", default: "#" }
+          - { label: "LinkedIn URL", name: "linkedin_url", widget: "string", default: "#" }
+          - { label: "Pinterest URL", name: "pinterest_url", widget: "string", default: "#" }
+          - { label: "Address", name: "address", widget: "string", default: "Your Store Address" }
+          - { label: "Phone", name: "phone", widget: "string", default: "+01 1234567890" }
+          - { label: "Email", name: "email", widget: "string", default: "demo@gmail.com" }
+          - { label: "Logo", name: "logo", widget: "image", required: false }
+          - { label: "Favicon", name: "favicon", widget: "image", required: false }
+          - { label: "Hero Background", name: "hero_background", widget: "image", required: false }
+          - { label: "Arrival Background", name: "arrival_background", widget: "image", required: false }
+
+  # Products
+  - name: "products"
+    label: "Products"
+    folder: "content/products"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Price", name: "price", widget: "string" }
+      - { label: "Image", name: "image", widget: "image" }
+      - { label: "Category", name: "category", widget: "select", options: ["Men", "Women", "Kids", "Accessories"] }
+      - { label: "Description", name: "description", widget: "text", required: false }
+      - { label: "WhatsApp Number", name: "whatsapp", widget: "string", hint: "Format: +628123456789" }
+
+  # Testimonials
+  - name: "testimonials"
+    label: "Testimonials"
+    folder: "content/testimonials"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Name", name: "name", widget: "string" }
+      - { label: "Role", name: "role", widget: "string" }
+      - { label: "Content", name: "content", widget: "text" }
+      - { label: "Image", name: "image", widget: "image", default: "images/client.jpg" }
+      - { label: "Rating", name: "rating", widget: "number", default: 5, min: 1, max: 5 }
+
+  # Gallery
+  - name: "gallery"
+    label: "Gallery"
+    folder: "content/gallery"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Image", name: "image", widget: "image" }
+      - { label: "Category", name: "category", widget: "select", options: ["Fashion", "Products", "Store", "Events"] }
+      - { label: "Alt Text", name: "alt_text", widget: "string", required: false }

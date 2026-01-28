@@ -50,6 +50,11 @@
                         <li class="nav-item">
                            <a class="nav-link" href="contact.html">Contact</a>
                         </li>
+                        <li class="nav-item admin-link">
+                           <a class="nav-link" href="admin/" style="display: none;">
+                              <i class="fa fa-cog me-1"></i> Admin
+                           </a>
+                        </li>
                         <li class="nav-item">
                            <a class="nav-link" href="#">
                               <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 456.029 456.029" style="enable-background:new 0 0 456.029 456.029;" xml:space="preserve">
@@ -1057,6 +1062,39 @@
             }
           });
         }
+      </script>
+      
+      <!-- Admin Link Script -->
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          if (window.netlifyIdentity) {
+            window.netlifyIdentity.on('init', user => {
+              if (user) {
+                // Show admin link for logged in users
+                const adminLinks = document.querySelectorAll('.admin-link');
+                adminLinks.forEach(link => {
+                  link.style.display = 'block';
+                });
+              }
+            });
+            
+            window.netlifyIdentity.on('login', user => {
+              // Show admin link when user logs in
+              const adminLinks = document.querySelectorAll('.admin-link');
+              adminLinks.forEach(link => {
+                link.style.display = 'block';
+              });
+            });
+            
+            window.netlifyIdentity.on('logout', () => {
+              // Hide admin link when user logs out
+              const adminLinks = document.querySelectorAll('.admin-link');
+              adminLinks.forEach(link => {
+                link.style.display = 'none';
+              });
+            });
+          }
+        });
       </script>
    </body>
 </html>
