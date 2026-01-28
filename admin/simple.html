@@ -6,6 +6,9 @@
     <link rel="shortcut icon" href="images/favicon.png" type="">
     <title>Famms Admin Panel</title>
     
+    <!-- Netlify Identity Widget -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    
     <!-- Media Upload Configuration -->
     <script>
         window.CMS_CONFIG = {
@@ -455,8 +458,15 @@
 </head>
 <body>
     <div class="header">
-        <h1>🛍️ Famms Admin Panel</h1>
-        <p>Simple Content Management System</p>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h1>🛍️ Famms Admin Panel</h1>
+                <p>Simple Content Management System</p>
+            </div>
+            <button onclick="handleLogout()" style="background: #e74c3c; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600;">
+                🚪 Logout
+            </button>
+        </div>
     </div>
     
     <div class="container">
@@ -1859,6 +1869,35 @@
                 console.log('Error loading initial data:', error);
             }
         });
+        
+        // Authentication check for admin/simple.html
+        if (window.netlifyIdentity) {
+            window.netlifyIdentity.on('init', user => {
+                if (!user) {
+                    // User not logged in, redirect to login page
+                    console.log('User not authenticated, redirecting to login...');
+                    window.location.href = '/admin/login.html';
+                } else {
+                    // User logged in, show admin panel
+                    console.log('User authenticated:', user.email);
+                }
+            });
+            
+            window.netlifyIdentity.on('logout', () => {
+                // User logged out, redirect to login page
+                window.location.href = '/admin/login.html';
+            });
+        } else {
+            // Netlify Identity not available, redirect to login
+            console.log('Netlify Identity not available, redirecting to login...');
+            window.location.href = '/admin/login.html';
+        }
+        
+        function handleLogout() {
+            if (window.netlifyIdentity) {
+                window.netlifyIdentity.logout();
+            }
+        }
     </script>
 </body>
 </html>

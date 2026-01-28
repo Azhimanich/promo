@@ -1042,6 +1042,17 @@
             navbar.appendChild(adminLink);
           }
         });
+        
+        // Check if user is logged in and update admin link
+        if (window.netlifyIdentity) {
+          window.netlifyIdentity.on('init', user => {
+            const adminLink = document.querySelector('a[href="/admin/login.html"]');
+            if (adminLink && user) {
+              adminLink.href = '/admin/simple.html';
+              adminLink.textContent = '🛠️ Admin Panel';
+            }
+          });
+        }
       </script>
    </body>
 </html>
