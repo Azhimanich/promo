@@ -1023,11 +1023,25 @@
           window.netlifyIdentity.on('init', user => {
             if (!user) {
               window.netlifyIdentity.on('login', () => {
-                document.location.href = '/admin/';
+                document.location.href = '/admin/login.html';
               });
             }
           });
         }
+        
+        // Add admin link to navigation
+        document.addEventListener('DOMContentLoaded', () => {
+          const navbar = document.querySelector('.navbar-nav');
+          if (navbar) {
+            const adminLink = document.createElement('a');
+            adminLink.href = '/admin/login.html';
+            adminLink.className = 'nav-link';
+            adminLink.textContent = '🔐 Admin';
+            adminLink.style.color = '#fff';
+            adminLink.style.marginLeft = '15px';
+            navbar.appendChild(adminLink);
+          }
+        });
       </script>
    </body>
 </html>
