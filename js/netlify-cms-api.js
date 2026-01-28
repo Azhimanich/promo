@@ -138,14 +138,16 @@ class NetlifyCMSAPI {
 
     async saveAboutData(data) {
         try {
-            // Save to localStorage
-            localStorage.setItem('cms_about.json', JSON.stringify(data));
-            
-            // Also save to about.json file simulation
-            await this.simulateFileSave('about.json', data);
+            // Save using CMS Data Sync for persistence
+            window.saveCMSData('about.json', data);
             
             showMessage('✅ About page saved successfully!', 'success');
             console.log('About data saved:', data);
+            
+            // Trigger frontend update
+            setTimeout(() => {
+                this.notifyFrontendUpdate();
+            }, 500);
         } catch (error) {
             console.error('Error saving about data:', error);
             showMessage('❌ Failed to save about page', 'error');
@@ -154,14 +156,16 @@ class NetlifyCMSAPI {
 
     async savePagesData(data) {
         try {
-            // Save to localStorage
-            localStorage.setItem('cms_index.json', JSON.stringify(data));
-            
-            // Also save to index.json file simulation
-            await this.simulateFileSave('index.json', data);
+            // Save using CMS Data Sync for persistence
+            window.saveCMSData('index.json', data);
             
             showMessage('✅ Pages saved successfully!', 'success');
             console.log('Pages data saved:', data);
+            
+            // Trigger frontend update
+            setTimeout(() => {
+                this.notifyFrontendUpdate();
+            }, 500);
         } catch (error) {
             console.error('Error saving pages data:', error);
             showMessage('❌ Failed to save pages', 'error');
@@ -170,14 +174,16 @@ class NetlifyCMSAPI {
 
     async saveSettingsData(data) {
         try {
-            // Save to localStorage
-            localStorage.setItem('cms_settings.json', JSON.stringify(data));
-            
-            // Also save to settings.json file simulation
-            await this.simulateFileSave('settings.json', data);
+            // Save using CMS Data Sync for persistence
+            window.saveCMSData('settings.json', data);
             
             showMessage('✅ Settings saved successfully!', 'success');
             console.log('Settings data saved:', data);
+            
+            // Trigger frontend update
+            setTimeout(() => {
+                this.notifyFrontendUpdate();
+            }, 500);
         } catch (error) {
             console.error('Error saving settings data:', error);
             showMessage('❌ Failed to save settings', 'error');
@@ -186,14 +192,35 @@ class NetlifyCMSAPI {
 
     async saveTestimonialData(data) {
         try {
-            // Save to localStorage
-            localStorage.setItem('cms_testimonial.json', JSON.stringify(data));
+            // Save using CMS Data Sync for persistence
+            window.saveCMSData('testimonial.json', data);
             
             showMessage('✅ Testimonial saved successfully!', 'success');
             console.log('Testimonial data saved:', data);
+            
+            // Trigger frontend update
+            setTimeout(() => {
+                this.notifyFrontendUpdate();
+            }, 500);
         } catch (error) {
             console.error('Error saving testimonial data:', error);
             showMessage('❌ Failed to save testimonial', 'error');
+        }
+    }
+
+    // Notify frontend update
+    notifyFrontendUpdate() {
+        // Trigger custom event
+        window.dispatchEvent(new CustomEvent('cms-data-updated', {
+            detail: {
+                timestamp: Date.now(),
+                source: 'admin-panel'
+            }
+        }));
+        
+        // Force refresh CMS Integration if available
+        if (window.cmsIntegration) {
+            window.cmsIntegration.refreshData();
         }
     }
 
@@ -212,21 +239,13 @@ class NetlifyCMSAPI {
     // Method to load data with fallback
     async loadData(filename) {
         try {
-            // Try localStorage first
-            const localData = localStorage.getItem(`cms_${filename}`);
-            if (localData) {
-                return JSON.parse(localData);
-            }
-            
-            // Try fetching the actual file
-            const response = await fetch(`/content/${filename}`);
-            if (response.ok) {
-                const data = await response.json();
-                localStorage.setItem(`cms_${filename}`, JSON.stringify(data));
+            // Use CMS Data Sync for loading
+            const data = window.loadCMSData(filename);
+            if (data && Object.keys(data).length > 0) {
                 return data;
             }
             
-            // Return default data if both fail
+            // Fallback to default data
             return this.getDefaultData(filename);
         } catch (error) {
             console.error(`Error loading ${filename}:`, error);

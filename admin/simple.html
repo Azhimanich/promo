@@ -12,6 +12,9 @@
     <!-- Netlify CMS API Bridge -->
     <script src="../js/netlify-cms-api.js"></script>
     
+    <!-- CMS Data Sync -->
+    <script src="../js/cms-data-sync.js"></script>
+    
     <!-- Simple CMS Bridge -->
     <script src="../js/simple-cms-bridge.js"></script>
     
@@ -472,9 +475,18 @@
                 <h1>🛍️ Famms Admin Panel</h1>
                 <p>Simple Content Management System</p>
             </div>
-            <button onclick="handleLogout()" style="background: #e74c3c; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600;">
-                🚪 Logout
-            </button>
+            <div style="display: flex; gap: 10px;">
+                <button onclick="exportCMSData()" style="background: #27ae60; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600;">
+                    📤 Export Data
+                </button>
+                <button onclick="document.getElementById('importFile').click()" style="background: #3498db; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600;">
+                    📥 Import Data
+                </button>
+                <input type="file" id="importFile" accept=".json" style="display: none;" onchange="handleImportData(event)">
+                <button onclick="handleLogout()" style="background: #e74c3c; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600;">
+                    🚪 Logout
+                </button>
+            </div>
         </div>
     </div>
     
@@ -1843,6 +1855,29 @@
         setTimeout(() => {
             testImageUpload();
         }, 1000);
+        
+        // Data management functions
+        function handleImportData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            if (confirm('This will replace all current data. Are you sure?')) {
+                window.importCMSData(file)
+                    .then(() => {
+                        showMessage('✅ Data imported successfully! Refreshing...', 'success');
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1500);
+                    })
+                    .catch(error => {
+                        console.error('Import error:', error);
+                        showMessage('❌ Failed to import data', 'error');
+                    });
+            }
+            
+            // Reset file input
+            event.target.value = '';
+        }
         
         // Authentication check for admin/simple.html
         if (window.netlifyIdentity) {
