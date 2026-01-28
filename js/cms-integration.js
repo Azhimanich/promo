@@ -24,37 +24,58 @@ class CMSIntegration {
 
     async loadData() {
         try {
+            // Add cache busting untuk selalu dapat file terbaru
+            const timestamp = Date.now();
+            
             // Load main data file
-            const mainResponse = await fetch('/content/data.json');
+            const mainResponse = await fetch(`/content/data.json?t=${timestamp}`);
             if (mainResponse.ok) {
                 this.data = await mainResponse.json();
             } else {
                 throw new Error(`Main data file not found: ${mainResponse.status}`);
             }
 
-            // Load individual product files
+            // Load products index
             try {
-                // For local development, we'll load individual product files
-                const productFiles = ['mens-shirt-1.json', 'mens-shirt-2.json', 'mens-shirt-3.json', 'mens-shirt-4.json', 'mens-shirt-5.json', 'mens-shirt-6.json', 'womens-dress-1.json', 'womens-dress-2.json', 'womens-dress-3.json', 'womens-dress-4.json', 'kids-tshirt-1.json', 'accessories-bag-1.json'];
-                const products = [];
-                
-                for (const file of productFiles) {
-                    const productResponse = await fetch(`/content/products/${file}`);
-                    if (productResponse.ok) {
-                        products.push(await productResponse.json());
+                const productsIndexResponse = await fetch(`/content/products/index.json?t=${timestamp}`);
+                if (productsIndexResponse.ok) {
+                    const productsIndex = await productsIndexResponse.json();
+                    const products = [];
+                    
+                    // Load individual product files
+                    for (const file of productsIndex.products || []) {
+                        const productResponse = await fetch(`/content/products/${file}?t=${timestamp}`);
+                        if (productResponse.ok) {
+                            products.push(await productResponse.json());
+                        }
+                    }
+                    
+                    if (products.length > 0) {
+                        this.data.products = products;
+                    }
+                } else {
+                    // Fallback untuk development
+                    const productFiles = ['mens-shirt-1.json', 'mens-shirt-2.json', 'mens-shirt-3.json', 'mens-shirt-4.json', 'mens-shirt-5.json', 'mens-shirt-6.json', 'womens-dress-1.json', 'womens-dress-2.json', 'womens-dress-3.json', 'womens-dress-4.json', 'kids-tshirt-1.json', 'accessories-bag-1.json'];
+                    const products = [];
+                    
+                    for (const file of productFiles) {
+                        const productResponse = await fetch(`/content/products/${file}?t=${timestamp}`);
+                        if (productResponse.ok) {
+                            products.push(await productResponse.json());
+                        }
+                    }
+                    
+                    if (products.length > 0) {
+                        this.data.products = products;
                     }
                 }
-                
-                if (products.length > 0) {
-                    this.data.products = products;
-                }
             } catch (error) {
-                console.log('Individual product files not available, using main data');
+                console.log('Error loading products index:', error);
             }
 
             // Load page settings
             try {
-                const indexResponse = await fetch('/content/index.json');
+                const indexResponse = await fetch(`/content/index.json?t=${timestamp}`);
                 if (indexResponse.ok) {
                     const indexData = await indexResponse.json();
                     this.data.pages.index = { ...this.data.pages.index, ...indexData };
@@ -574,6 +595,26 @@ class CMSIntegration {
             element.textContent = content;
         }
     }
+
+    // Method untuk refresh data setelah CMS update
+    async refreshData() {
+        console.log('Refreshing CMS data...');
+        try {
+            await this.loadData();
+            this.updateHeroSection();
+            this.updateArrivalSection();
+            this.updateProducts();
+            this.updateFooter();
+            this.updateGlobalSettings();
+            this.updateTestimonials();
+            this.updateGallery();
+            this.updateAboutPage();
+            this.updateSiteImages();
+            console.log('CMS data refreshed successfully');
+        } catch (error) {
+            console.error('Error refreshing CMS data:', error);
+        }
+    }
 }
 
 // Initialize CMS Integration when DOM is loaded
@@ -587,3 +628,26 @@ window.refreshCMS = () => {
         window.cmsIntegration.refreshData();
     }
 };
+
+// Auto-refresh setelah CMS save (Netlify CMS)
+window.addEventListener('message', (event) => {
+    if (event.data && event.data.type === 'cms-save-success') {
+        console.log('CMS save detected, refreshing data...');
+        setTimeout(() => {
+            window.refreshCMS();
+        }, 1000); // Tunggu 1 detik untuk deploy selesai
+    }
+});
+
+// Listen untuk Netlify CMS events
+if (window.CMS) {
+    window.CMS.registerEventListener({
+        'postSave': async ({ entry }) => {
+            console.log('CMS entry saved:', entry);
+            // Refresh data setelah save
+            setTimeout(() => {
+                window.refreshCMS();
+            }, 2000);
+        }
+    });
+}

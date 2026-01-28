@@ -6,6 +6,8 @@
     <title>Famms Admin - Decap CMS</title>
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.css" />
+    <!-- Netlify Identity Widget -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <style>
         body {
             margin: 0;
@@ -91,6 +93,17 @@
                 ]
             }
         });
+    </script>
+    <script>
+        if (window.netlifyIdentity) {
+            window.netlifyIdentity.on('init', user => {
+                if (!user) {
+                    window.netlifyIdentity.on('login', () => {
+                        document.location.href = '/admin/';
+                    });
+                }
+            });
+        }
     </script>
 </body>
 </html>
