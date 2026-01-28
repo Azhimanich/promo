@@ -189,7 +189,7 @@
         
         <div class="info-box">
             <h4>🔐 Secure Admin Access</h4>
-            <p>This is a private admin panel. Access is restricted to invited users only. Please use your registered email and password.</p>
+            <p>Click the button below to login with Netlify Identity. Make sure you have been invited as an admin user.</p>
         </div>
         
         <div id="error" class="error"></div>
@@ -197,18 +197,8 @@
         
         <div class="login-form">
             <div id="login-section">
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" placeholder="admin@example.com" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" placeholder="Enter your password" required>
-                </div>
-                
                 <button id="login-btn" class="login-btn" onclick="handleLogin()">
-                    🔐 Login to Admin Panel
+                    🔐 Login with Netlify Identity
                 </button>
             </div>
         </div>
@@ -242,26 +232,11 @@
         }
         
         function handleLogin() {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
             const loginBtn = document.getElementById('login-btn');
             const loginSection = document.getElementById('login-section');
             const loading = document.getElementById('loading');
             const error = document.getElementById('error');
             const success = document.getElementById('success');
-            
-            // Basic validation
-            if (!email || !password) {
-                showError('Please enter both email and password');
-                return;
-            }
-            
-            // Validate email format
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                showError('Please enter a valid email address');
-                return;
-            }
             
             // Show loading
             loginSection.style.display = 'none';
@@ -271,27 +246,37 @@
             
             // Initiate Netlify Identity login
             if (window.netlifyIdentity) {
-                // Set timeout untuk 30 detik
+                // Set timeout untuk 15 detik (lebih cepat)
                 const timeout = setTimeout(() => {
-                    showError('Authentication taking too long. Please check your connection and try again.');
+                    showError('Authentication taking too long. Please try again or check if you have been invited.');
                     loginSection.style.display = 'block';
                     loading.style.display = 'none';
-                }, 30000);
+                }, 15000);
                 
-                // For email/password login, we need to use Netlify Identity directly
-                window.netlifyIdentity.login(email, password)
-                    .then(user => {
-                        clearTimeout(timeout);
-                        console.log('Login successful:', user);
-                        redirectToAdmin();
-                    })
-                    .catch(err => {
-                        clearTimeout(timeout);
-                        console.error('Login error:', err);
-                        showError('Login failed. Please check your email and password, or contact admin for invitation.');
-                        loginSection.style.display = 'block';
-                        loading.style.display = 'none';
-                    });
+                // Use Netlify Identity widget for better UX
+                window.netlifyIdentity.open('login');
+                
+                // Listen for successful login
+                window.netlifyIdentity.on('login', (user) => {
+                    clearTimeout(timeout);
+                    console.log('Login successful:', user);
+                    redirectToAdmin();
+                });
+                
+                window.netlifyIdentity.on('error', (err) => {
+                    clearTimeout(timeout);
+                    console.error('Identity error:', err);
+                    showError('Login failed. Please check if you have been invited to access this admin panel.');
+                    loginSection.style.display = 'block';
+                    loading.style.display = 'none';
+                });
+                
+                // Handle close widget
+                window.netlifyIdentity.on('close', () => {
+                    clearTimeout(timeout);
+                    loginSection.style.display = 'block';
+                    loading.style.display = 'none';
+                });
             } else {
                 showError('Authentication service not available');
                 loginSection.style.display = 'block';
@@ -331,24 +316,11 @@
                 redirectToAdmin();
             });
             
-            window.netlifyIdentity.on('error', err => {
-                console.error('Identity error:', err);
-                showError('Authentication failed. Please check your credentials or contact admin for invitation.');
+            window.netlifyIdentity.on('logout', () => {
+                console.log('User logged out');
+                window.location.href = '/admin/login.html';
             });
         }
-        
-        // Handle Enter key in form fields
-        document.getElementById('email').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                document.getElementById('password').focus();
-            }
-        });
-        
-        document.getElementById('password').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                handleLogin();
-            }
-        });
     </script>
 </body>
 </html>
