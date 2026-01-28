@@ -215,6 +215,7 @@
         
         <div id="loading" class="loading">
             <p>🔄 Authenticating...</p>
+            <p style="font-size: 12px; margin-top: 10px;">This may take a few seconds...</p>
         </div>
         
         <div class="features">
@@ -270,13 +271,22 @@
             
             // Initiate Netlify Identity login
             if (window.netlifyIdentity) {
+                // Set timeout untuk 30 detik
+                const timeout = setTimeout(() => {
+                    showError('Authentication taking too long. Please check your connection and try again.');
+                    loginSection.style.display = 'block';
+                    loading.style.display = 'none';
+                }, 30000);
+                
                 // For email/password login, we need to use Netlify Identity directly
                 window.netlifyIdentity.login(email, password)
                     .then(user => {
+                        clearTimeout(timeout);
                         console.log('Login successful:', user);
                         redirectToAdmin();
                     })
                     .catch(err => {
+                        clearTimeout(timeout);
                         console.error('Login error:', err);
                         showError('Login failed. Please check your email and password, or contact admin for invitation.');
                         loginSection.style.display = 'block';
