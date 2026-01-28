@@ -1,0 +1,25 @@
+{
+  "page_title": "Testimoni",
+  "section_title": "Testimoni Pelanggan",
+  "inner_page_title": "Testimoni",
+  "testimonials": [
+    {
+      "name": "Anna Trevor",
+      "role": "Pelanggan",
+      "image": "images/client.jpg",
+      "content": "Layanan yang sangat memuaskan! Kualitas produk luar biasa dan pengiriman cepat. Sangat merekomendasikan toko ini kepada teman-teman."
+    },
+    {
+      "name": "John Smith",
+      "role": "Pelanggan Setia",
+      "image": "images/client.jpg",
+      "content": "Saya sudah berbelanja di sini selama setahun dan selalu puas dengan kualitas dan pelayanannya. Harga terjangkau untuk produk berkualitas tinggi."
+    },
+    {
+      "name": "Sarah Johnson",
+      "role": "Pelanggan VIP",
+      "image": "images/client.jpg",
+      "content": "Toko fashion terbaik! Koleksinya selalu up-to-date dan sesuai dengan trend terkini. Customer service sangat ramah dan membantu."
+    }
+  ]
+}

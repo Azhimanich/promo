@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Social Media CRUD Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .social-links {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+        .social-links a {
+            display: inline-block;
+            margin-right: 10px;
+            padding: 5px 10px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔗 Social Media CRUD Test</h1>
+    
+    <form id="socialForm">
+        <h3>Social Media Settings</h3>
+        
+        <div class="form-group">
+            <label>Instagram URL</label>
+            <input type="url" id="instagram_url" placeholder="https://instagram.com/yourstore">
+        </div>
+        
+        <div class="form-group">
+            <label>Facebook URL</label>
+            <input type="url" id="facebook_url" placeholder="https://facebook.com/yourstore">
+        </div>
+        
+        <div class="form-group">
+            <label>Twitter URL</label>
+            <input type="url" id="twitter_url" placeholder="https://twitter.com/yourstore">
+        </div>
+        
+        <div class="form-group">
+            <label>LinkedIn URL</label>
+            <input type="url" id="linkedin_url" placeholder="https://linkedin.com/company/yourstore">
+        </div>
+        
+        <div class="form-group">
+            <label>Pinterest URL</label>
+            <input type="url" id="pinterest_url" placeholder="https://pinterest.com/yourstore">
+        </div>
+        
+        <button type="submit">💾 Save Social Media</button>
+    </form>
+    
+    <div id="result"></div>
+    
+    <div class="social-links">
+        <h3>Current Social Links:</h3>
+        <div id="currentLinks">
+            <a href="#" id="link-facebook">Facebook</a>
+            <a href="#" id="link-instagram">Instagram</a>
+            <a href="#" id="link-twitter">Twitter</a>
+            <a href="#" id="link-linkedin">LinkedIn</a>
+            <a href="#" id="link-pinterest">Pinterest</a>
+        </div>
+    </div>
+    
+    <script>
+        // Load current settings
+        async function loadSettings() {
+            try {
+                const response = await fetch('/content/settings.json');
+                if (response.ok) {
+                    const settings = await response.json();
+                    
+                    // Update form fields
+                    document.getElementById('instagram_url').value = settings.instagram_url || '#';
+                    document.getElementById('facebook_url').value = settings.facebook_url || '#';
+                    document.getElementById('twitter_url').value = settings.twitter_url || '#';
+                    document.getElementById('linkedin_url').value = settings.linkedin_url || '#';
+                    document.getElementById('pinterest_url').value = settings.pinterest_url || '#';
+                    
+                    // Update preview links
+                    document.getElementById('link-facebook').href = settings.facebook_url || '#';
+                    document.getElementById('link-instagram').href = settings.instagram_url || '#';
+                    document.getElementById('link-twitter').href = settings.twitter_url || '#';
+                    document.getElementById('link-linkedin').href = settings.linkedin_url || '#';
+                    document.getElementById('link-pinterest').href = settings.pinterest_url || '#';
+                    
+                    console.log('Settings loaded:', settings);
+                }
+            } catch (error) {
+                console.error('Error loading settings:', error);
+            }
+        }
+        
+        // Save settings
+        document.getElementById('socialForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const socialData = {
+                instagram_url: document.getElementById('instagram_url').value,
+                facebook_url: document.getElementById('facebook_url').value,
+                twitter_url: document.getElementById('twitter_url').value,
+                linkedin_url: document.getElementById('linkedin_url').value,
+                pinterest_url: document.getElementById('pinterest_url').value
+            };
+            
+            try {
+                // Load existing settings
+                const existingResponse = await fetch('/content/settings.json');
+                let existingData = {};
+                
+                if (existingResponse.ok) {
+                    existingData = await existingResponse.json();
+                }
+                
+                // Merge with social data
+                const updatedData = { ...existingData, ...socialData };
+                
+                // Save updated settings
+                const saveResponse = await fetch('/content/settings.json', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(updatedData, null, 2)
+                });
+                
+                const result = await saveResponse.json();
+                
+                if (saveResponse.ok) {
+                    document.getElementById('result').innerHTML = `
+                        <div class="success">
+                            ✅ Social media settings saved successfully!
+                            <br><small>Refresh website to see changes</small>
+                        </div>
+                    `;
+                    
+                    // Update preview
+                    document.getElementById('link-facebook').href = socialData.facebook_url;
+                    document.getElementById('link-instagram').href = socialData.instagram_url;
+                    document.getElementById('link-twitter').href = socialData.twitter_url;
+                    document.getElementById('link-linkedin').href = socialData.linkedin_url;
+                    document.getElementById('link-pinterest').href = socialData.pinterest_url;
+                    
+                    console.log('Social media saved:', socialData);
+                } else {
+                    document.getElementById('result').innerHTML = `
+                        <div class="error">
+                            ❌ Failed to save: ${result.error || 'Unknown error'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                document.getElementById('result').innerHTML = `
+                    <div class="error">
+                        ❌ Error: ${error.message}
+                    </div>
+                `;
+                console.error('Error saving:', error);
+            }
+        });
+        
+        // Load settings on page load
+        window.addEventListener('load', loadSettings);
+    </script>
+</body>
+</html>

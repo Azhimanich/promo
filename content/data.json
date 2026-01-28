@@ -1,0 +1,244 @@
+{
+  "pages": {
+    "index": {
+      "hero_title": "Sale 20% Off",
+      "hero_subtitle": "On Everything",
+      "hero_description": "Explicabo esse amet tempora quibusdam laudantium, laborum eaque magnam fugiat hic? Esse dicta aliquid error repudiandae earum suscipit fugiat molestias, veniam, vel architecto veritatis delectus repellat modi impedit sequi.",
+      "arrival_title": "#NewArrivals",
+      "arrival_description": "Vitae fugiat laboriosam officia perferendis provident aliquid voluptatibus dolorem, fugit ullam sit earum id eaque nisi hic? Tenetur commodi, nisi rem vel, ea eaque ab ipsa, autem similique ex unde!"
+    }
+  },
+  "products": [
+    {
+      "title": "Men's Shirt",
+      "price": "$75",
+      "image": "images/p1.png",
+      "wa_link": "https://wa.me/628123456789?text=Saya+ingin+beli+Men's+Shirt"
+    },
+    {
+      "title": "Men's Shirt",
+      "price": "$80",
+      "image": "images/p2.png",
+      "wa_link": "https://wa.me/628123456789?text=Saya+ingin+beli+Men's+Shirt"
+    },
+    {
+      "title": "Women's Dress",
+      "price": "$68",
+      "image": "images/p3.png",
+      "wa_link": "https://wa.me/628123456789?text=Saya+ingin+beli+Women's+Dress"
+    },
+    {
+      "title": "Women's Dress",
+      "price": "$70",
+      "image": "images/p4.png",
+      "wa_link": "https://wa.me/628123456789?text=Saya+ingin+beli+Women's+Dress"
+    },
+    {
+      "title": "Women's Dress",
+      "price": "$75",
+      "image": "images/p5.png",
+      "wa_link": "https://wa.me/628123456789?text=Saya+ingin+beli+Women's+Dress"
+    },
+    {
+      "title": "Women's Dress",
+      "price": "$58",
+      "image": "images/p6.png",
+      "wa_link": "https://wa.me/628123456789?text=Saya+ingin+beli+Women's+Dress"
+    },
+    {
+      "title": "Women's Dress",
+      "price": "$80",
+      "image": "images/p7.png",
+      "wa_link": "https://wa.me/628123456789?text=Saya+ingin+beli+Women's+Dress"
+    },
+    {
+      "title": "Men's Shirt",
+      "price": "$65",
+      "image": "images/p8.png",
+      "wa_link": "https://wa.me/628123456789?text=Saya+ingin+beli+Men's+Shirt"
+    },
+    {
+      "title": "Men's Shirt",
+      "price": "$65",
+      "image": "images/p9.png",
+      "wa_link": "https://wa.me/628123456789?text=Saya+ingin+beli+Men's+Shirt"
+    },
+    {
+      "title": "Men's Shirt",
+      "price": "$65",
+      "image": "images/p10.png",
+      "wa_link": "https://wa.me/628123456789?text=Saya+ingin+beli+Men's+Shirt"
+    },
+    {
+      "title": "Men's Shirt",
+      "price": "$65",
+      "image": "images/p11.png",
+      "wa_link": "https://wa.me/628123456789?text=Saya+ingin+beli+Men's+Shirt"
+    },
+    {
+      "title": "Women's Dress",
+      "price": "$65",
+      "image": "images/p12.png",
+      "wa_link": "https://wa.me/628123456789?text=Saya+ingin+beli+Women's+Dress"
+    }
+  ],
+  "site_settings": {
+    "store_name": "Famms",
+    "whatsapp_number": "628123456789",
+    "instagram_url": "#",
+    "facebook_url": "#",
+    "twitter_url": "#",
+    "linkedin_url": "#",
+    "pinterest_url": "#",
+    "address": "Your Store Address",
+    "phone": "+01 1234567890",
+    "email": "demo@gmail.com",
+    "logo": "images/logo.png",
+    "favicon": "images/favicon.png",
+    "hero_background": "images/slider-bg.jpg",
+    "arrival_background": "images/arrival-bg.png"
+  },
+  "testimonials": [
+    {
+      "name": "Anna Trevor",
+      "role": "Customer",
+      "content": "Dignissimos reprehenderit repellendus nobis error quibusdam? Atque animi sint unde quis reprehenderit, et, perspiciatis, debitis totam est deserunt eius officiis ipsum ducimus ad labore modi voluptatibus accusantium sapiente nam! Quaerat.",
+      "image": "images/client.jpg",
+      "rating": 5
+    },
+    {
+      "name": "Michael Chen",
+      "role": "Regular Customer",
+      "content": "Excellent service and high-quality products! The team at Famms really knows fashion. I've been a loyal customer for over a year and couldn't be happier with their collection and customer service.",
+      "image": "images/client.jpg",
+      "rating": 5
+    },
+    {
+      "name": "Sarah Johnson",
+      "role": "Fashion Enthusiast",
+      "content": "Famms has completely transformed my wardrobe! Their trendy designs and affordable prices make it easy to stay fashionable without breaking the bank. Highly recommend!",
+      "image": "images/client.jpg",
+      "rating": 5
+    }
+  ],
+  "gallery": [
+    {
+      "title": "Fashion Collection 2024",
+      "image": "images/gallery-1.jpg",
+      "category": "Fashion",
+      "alt_text": "Latest fashion collection showcase"
+    },
+    {
+      "title": "Premium Products",
+      "image": "images/gallery-2.jpg",
+      "category": "Products",
+      "alt_text": "Premium product display"
+    },
+    {
+      "title": "Store Interior",
+      "image": "images/gallery-3.jpg",
+      "category": "Store",
+      "alt_text": "Beautiful store interior design"
+    },
+    {
+      "title": "Fashion Event",
+      "image": "images/gallery-4.jpg",
+      "category": "Events",
+      "alt_text": "Fashion show event"
+    },
+    {
+      "title": "Summer Collection",
+      "image": "images/gallery-5.jpg",
+      "category": "Fashion",
+      "alt_text": "Summer fashion collection"
+    },
+    {
+      "title": "Accessories Line",
+      "image": "images/gallery-6.jpg",
+      "category": "Products",
+      "alt_text": "Fashion accessories collection"
+    },
+    {
+      "title": "Store Front",
+      "image": "images/gallery-7.jpg",
+      "category": "Store",
+      "alt_text": "Modern store front design"
+    },
+    {
+      "title": "Fashion Week",
+      "image": "images/gallery-8.jpg",
+      "category": "Events",
+      "alt_text": "Fashion week runway show"
+    },
+    {
+      "title": "Winter Collection",
+      "image": "images/gallery-9.jpg",
+      "category": "Fashion",
+      "alt_text": "Winter fashion collection"
+    },
+    {
+      "title": "Premium Quality",
+      "image": "images/gallery-10.jpg",
+      "category": "Products",
+      "alt_text": "Premium quality fashion items"
+    },
+    {
+      "title": "Customer Service",
+      "image": "images/gallery-11.jpg",
+      "category": "Store",
+      "alt_text": "Excellent customer service"
+    },
+    {
+      "title": "Fashion Show",
+      "image": "images/gallery-12.jpg",
+      "category": "Events",
+      "alt_text": "Fashion show backstage"
+    }
+  ],
+  "about": {
+    "hero_title": "About Famms",
+    "hero_subtitle": "Your Trusted Fashion Partner Since 2020",
+    "hero_description": "We are dedicated to providing high-quality fashion products that combine style, comfort, and affordability for the modern consumer.",
+    "hero_background": "images/slider-bg.jpg",
+    "story_title": "Our Story",
+    "story_subtitle": "From a small idea to a fashion destination",
+    "story_content": "Founded in 2020, Famms began as a small boutique with a big vision: to make quality fashion accessible to everyone.",
+    "story_content_2": "Our journey has been driven by passion for fashion and commitment to customer satisfaction.",
+    "story_content_3": "Today, Famms stands as a testament to what can be achieved with dedication, hard work, and a genuine love for fashion.",
+    "story_image": "images/about-story.jpg",
+    "gallery_title": "Galeri Kami",
+    "gallery_subtitle": "Koleksi fashion terbaik kami",
+    "mission_title": "Our Mission & Values",
+    "mission_subtitle": "What drives us every day",
+    "mission_1_title": "Quality First",
+    "mission_1_description": "We never compromise on quality. Every product is carefully selected and tested to ensure it meets our high standards.",
+    "mission_2_title": "Customer Focus",
+    "mission_2_description": "Our customers are at the center of everything we do. We listen, learn, and continuously improve based on your feedback.",
+    "mission_3_title": "Sustainability",
+    "mission_3_description": "We are committed to sustainable fashion practices that protect our planet and support ethical manufacturing.",
+    "team_title": "Meet Our Team",
+    "team_subtitle": "The passionate people behind Famms",
+    "team_1_name": "Sarah Johnson",
+    "team_1_role": "Founder & CEO",
+    "team_1_image": "images/team-1.jpg",
+    "team_2_name": "Michael Chen",
+    "team_2_role": "Creative Director",
+    "team_2_image": "images/team-2.jpg",
+    "team_3_name": "Emily Davis",
+    "team_3_role": "Marketing Manager",
+    "team_3_image": "images/team-3.jpg",
+    "team_4_name": "James Wilson",
+    "team_4_role": "Operations Manager",
+    "team_4_image": "images/team-4.jpg",
+    "stat_1_number": "50K+",
+    "stat_1_label": "Happy Customers",
+    "stat_2_number": "1000+",
+    "stat_2_label": "Products",
+    "stat_3_number": "50+",
+    "stat_3_label": "Brand Partners",
+    "stat_4_number": "4.9★",
+    "stat_4_label": "Average Rating",
+    "cta_title": "Ready to Experience the Famms Difference?",
+    "cta_description": "Join thousands of satisfied customers who have discovered their perfect style with us."
+  }
+}

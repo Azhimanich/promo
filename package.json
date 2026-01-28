@@ -1,0 +1,22 @@
+{
+  "name": "famms-cms",
+  "version": "1.0.0",
+  "description": "Famms Fashion Website with Decap CMS",
+  "main": "index.html",
+  "scripts": {
+    "start": "node decap-server.js",
+    "dev": "node decap-server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "http-proxy-middleware": "^2.0.6"
+  },
+  "keywords": [
+    "fashion",
+    "ecommerce",
+    "decap-cms",
+    "jamstack"
+  ],
+  "author": "Famms",
+  "license": "MIT"
+}

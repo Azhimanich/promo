@@ -1,0 +1,16 @@
+{
+  "products": [
+    "mens-shirt-1.json",
+    "mens-shirt-2.json", 
+    "mens-shirt-3.json",
+    "mens-shirt-4.json",
+    "mens-shirt-5.json",
+    "mens-shirt-6.json",
+    "womens-dress-1.json",
+    "womens-dress-2.json",
+    "womens-dress-3.json", 
+    "womens-dress-4.json",
+    "kids-tshirt-1.json",
+    "accessories-bag-1.json"
+  ]
+}

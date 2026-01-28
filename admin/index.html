@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Famms Admin - Decap CMS</title>
+    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.css" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+                'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+                sans-serif;
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div id="nc-root"></div>
+    <script>
+        // Initialize Decap CMS with file-system backend
+        CMS.init({
+            config: {
+                backend: {
+                    name: 'file-system'
+                },
+                media_folder: "images/uploads",
+                public_folder: "/images/uploads",
+                collections: [
+                    {
+                        name: "pages",
+                        label: "Pages",
+                        files: [
+                            {
+                                name: "index",
+                                label: "Index Page",
+                                file: "content/index.json",
+                                fields: [
+                                    { label: "Hero Title", name: "hero_title", widget: "string", default: "Sale 20% Off" },
+                                    { label: "Hero Subtitle", name: "hero_subtitle", widget: "string", default: "On Everything" },
+                                    { label: "Hero Description", name: "hero_description", widget: "text", default: "Explicabo esse amet tempora quibusdam laudantium, laborum eaque magnam fugiat hic?" },
+                                    { label: "Arrival Title", name: "arrival_title", widget: "string", default: "#NewArrivals" },
+                                    { label: "Arrival Description", name: "arrival_description", widget: "text", default: "Vitae fugiat laboriosam officia perferendis provident aliquid voluptatibus dolorem, fugit ullam sit earum id eaque nisi hic?" }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        name: "products",
+                        label: "Products",
+                        folder: "content/products",
+                        create: true,
+                        slug: "{{slug}}",
+                        fields: [
+                            { label: "Title", name: "title", widget: "string" },
+                            { label: "Price", name: "price", widget: "string" },
+                            { label: "Image", name: "image", widget: "image" },
+                            { label: "Category", name: "category", widget: "select", options: ["Men", "Women", "Kids", "Accessories"] },
+                            { label: "Description", name: "description", widget: "text", required: false },
+                            { label: "WhatsApp Link", name: "wa_link", widget: "string", hint: "Format: https://wa.me/628123456789?text=Saya+ingin+beli+[nama_produk]" }
+                        ]
+                    },
+                    {
+                        name: "site_settings",
+                        label: "Site Settings",
+                        files: [
+                            {
+                                name: "settings",
+                                label: "General Settings",
+                                file: "content/settings.json",
+                                fields: [
+                                    { label: "Store Name", name: "store_name", widget: "string", default: "Famms" },
+                                    { label: "Store Description", name: "store_description", widget: "text", required: false },
+                                    { label: "WhatsApp Number", name: "whatsapp_number", widget: "string", default: "628123456789" },
+                                    { label: "Instagram URL", name: "instagram_url", widget: "string", default: "#" },
+                                    { label: "Facebook URL", name: "facebook_url", widget: "string", default: "#" },
+                                    { label: "Twitter URL", name: "twitter_url", widget: "string", default: "#" },
+                                    { label: "LinkedIn URL", name: "linkedin_url", widget: "string", default: "#" },
+                                    { label: "Pinterest URL", name: "pinterest_url", widget: "string", default: "#" },
+                                    { label: "Address", name: "address", widget: "string", default: "Your Store Address" },
+                                    { label: "Phone", name: "phone", widget: "string", default: "+01 1234567890" },
+                                    { label: "Email", name: "email", widget: "string", default: "demo@gmail.com" },
+                                    { label: "SEO Keywords", name: "seo_keywords", widget: "list", required: false },
+                                    { label: "SEO Description", name: "seo_description", widget: "text", required: false }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        });
+    </script>
+</body>
+</html>

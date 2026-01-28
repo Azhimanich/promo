@@ -1,0 +1,163 @@
+backend:
+  name: file-system
+
+media_folder: "images/uploads"
+public_folder: "/images/uploads"
+
+collections:
+  - name: "about"
+    label: "About Page"
+    files:
+      - name: "about"
+        label: "About Us Page"
+        file: "content/about.json"
+        fields:
+          - { label: "Hero Title", name: "hero_title", widget: "string", default: "About Famms" }
+          - { label: "Hero Subtitle", name: "hero_subtitle", widget: "string", default: "Your Trusted Fashion Partner Since 2020" }
+          - { label: "Hero Description", name: "hero_description", widget: "text", default: "We are dedicated to providing high-quality fashion products that combine style, comfort, and affordability for the modern consumer." }
+          - { label: "Story Title", name: "story_title", widget: "string", default: "Our Story" }
+          - { label: "Story Subtitle", name: "story_subtitle", widget: "string", default: "From a small idea to a fashion destination" }
+          - { label: "Story Content", name: "story_content", widget: "text", default: "Founded in 2020, Famms began as a small boutique with a big vision: to make quality fashion accessible to everyone." }
+          - { label: "Story Content 2", name: "story_content_2", widget: "text", default: "Our journey has been driven by passion for fashion and commitment to customer satisfaction." }
+          - { label: "Story Content 3", name: "story_content_3", widget: "text", default: "Today, Famms stands as a testament to what can be achieved with dedication, hard work, and a genuine love for fashion." }
+          - { label: "Mission Title", name: "mission_title", widget: "string", default: "Our Mission & Values" }
+          - { label: "Mission Subtitle", name: "mission_subtitle", widget: "string", default: "What drives us every day" }
+          - { label: "Mission 1 Title", name: "mission_1_title", widget: "string", default: "Quality First" }
+          - { label: "Mission 1 Description", name: "mission_1_description", widget: "text", default: "We never compromise on quality. Every product is carefully selected and tested to ensure it meets our high standards." }
+          - { label: "Mission 2 Title", name: "mission_2_title", widget: "string", default: "Customer Focus" }
+          - { label: "Mission 2 Description", name: "mission_2_description", widget: "text", default: "Our customers are at the center of everything we do. We listen, learn, and continuously improve based on your feedback." }
+          - { label: "Mission 3 Title", name: "mission_3_title", widget: "string", default: "Sustainability" }
+          - { label: "Mission 3 Description", name: "mission_3_description", widget: "text", default: "We are committed to sustainable fashion practices that protect our planet and support ethical manufacturing." }
+          - { label: "Team Title", name: "team_title", widget: "string", default: "Meet Our Team" }
+          - { label: "Team Subtitle", name: "team_subtitle", widget: "string", default: "The passionate people behind Famms" }
+          - { label: "Team Member 1 Name", name: "team_1_name", widget: "string", default: "Sarah Johnson" }
+          - { label: "Team Member 1 Role", name: "team_1_role", widget: "string", default: "Founder & CEO" }
+          - { label: "Team Member 2 Name", name: "team_2_name", widget: "string", default: "Michael Chen" }
+          - { label: "Team Member 2 Role", name: "team_2_role", widget: "string", default: "Creative Director" }
+          - { label: "Team Member 3 Name", name: "team_3_name", widget: "string", default: "Emily Davis" }
+          - { label: "Team Member 3 Role", name: "team_3_role", widget: "string", default: "Marketing Manager" }
+          - { label: "Team Member 4 Name", name: "team_4_name", widget: "string", default: "James Wilson" }
+          - { label: "Team Member 4 Role", name: "team_4_role", widget: "string", default: "Operations Manager" }
+          - { label: "Stat 1 Number", name: "stat_1_number", widget: "string", default: "50K+" }
+          - { label: "Stat 1 Label", name: "stat_1_label", widget: "string", default: "Happy Customers" }
+          - { label: "Stat 2 Number", name: "stat_2_number", widget: "string", default: "1000+" }
+          - { label: "Stat 2 Label", name: "stat_2_label", widget: "string", default: "Products" }
+          - { label: "Stat 3 Number", name: "stat_3_number", widget: "string", default: "50+" }
+          - { label: "Stat 3 Label", name: "stat_3_label", widget: "string", default: "Brand Partners" }
+          - { label: "Stat 4 Number", name: "stat_4_number", widget: "string", default: "4.9★" }
+          - { label: "Stat 4 Label", name: "stat_4_label", widget: "string", default: "Average Rating" }
+          - { label: "CTA Title", name: "cta_title", widget: "string", default: "Ready to Experience the Famms Difference?" }
+          - { label: "CTA Description", name: "cta_description", widget: "text", default: "Join thousands of satisfied customers who have discovered their perfect style with us." }
+
+  - name: "products"
+    label: "Products"
+    folder: "content/products"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Price", name: "price", widget: "string" }
+      - { label: "Image", name: "image", widget: "image" }
+      - { label: "Category", name: "category", widget: "select", options: ["Men", "Women", "Kids", "Accessories"] }
+      - { label: "Description", name: "description", widget: "text", required: false }
+      - { label: "WhatsApp Link", name: "wa_link", widget: "string", hint: "Format: https://wa.me/628123456789?text=Saya+ingin+beli+[nama_produk]" }
+
+  - name: "site_settings"
+    label: "Site Settings"
+    files:
+      - name: "settings"
+        label: "General Settings"
+        file: "content/settings.json"
+        fields:
+          - { label: "Store Name", name: "store_name", widget: "string", default: "Famms" }
+          - { label: "Store Description", name: "store_description", widget: "text", required: false }
+          - { label: "WhatsApp Number", name: "whatsapp_number", widget: "string", default: "628123456789" }
+          - { label: "Instagram URL", name: "instagram_url", widget: "string", default: "#" }
+          - { label: "Facebook URL", name: "facebook_url", widget: "string", default: "#" }
+          - { label: "Twitter URL", name: "twitter_url", widget: "string", default: "#" }
+          - { label: "LinkedIn URL", name: "linkedin_url", widget: "string", default: "#" }
+          - { label: "Pinterest URL", name: "pinterest_url", widget: "string", default: "#" }
+          - { label: "Address", name: "address", widget: "string", default: "Your Store Address" }
+          - { label: "Phone", name: "phone", widget: "string", default: "+01 1234567890" }
+          - { label: "Email", name: "email", widget: "string", default: "demo@gmail.com" }
+          - { label: "Logo", name: "logo", widget: "image", required: false }
+          - { label: "Favicon", name: "favicon", widget: "image", required: false }
+          - { label: "Hero Background", name: "hero_background", widget: "image", required: false }
+          - { label: "Arrival Background", name: "arrival_background", widget: "image", required: false }
+          - { label: "SEO Keywords", name: "seo_keywords", widget: "list", required: false }
+          - { label: "SEO Description", name: "seo_description", widget: "text", required: false }
+
+  - name: "testimonials"
+    label: "Testimonials"
+    folder: "content/testimonials"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Name", name: "name", widget: "string" }
+      - { label: "Role", name: "role", widget: "string" }
+      - { label: "Content", name: "content", widget: "text" }
+      - { label: "Image", name: "image", widget: "image" }
+      - { label: "Rating", name: "rating", widget: "number", default: 5, min: 1, max: 5 }
+
+  - name: "gallery"
+    label: "Gallery"
+    folder: "content/gallery"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Image", name: "image", widget: "image" }
+      - { label: "Category", name: "category", widget: "select", options: ["Fashion", "Products", "Store", "Events"] }
+      - { label: "Alt Text", name: "alt_text", widget: "string", required: false }
+
+  - name: "about_page"
+    label: "About Page"
+    files:
+      - name: "about"
+        label: "About Page Settings"
+        file: "content/about.json"
+        fields:
+          - { label: "Hero Title", name: "hero_title", widget: "string", default: "About Famms" }
+          - { label: "Hero Subtitle", name: "hero_subtitle", widget: "string", default: "Your Trusted Fashion Partner Since 2020" }
+          - { label: "Hero Description", name: "hero_description", widget: "text", default: "We are dedicated to providing high-quality fashion products that combine style, comfort, and affordability for the modern consumer." }
+          - { label: "Hero Background", name: "hero_background", widget: "image", required: false }
+          - { label: "Story Title", name: "story_title", widget: "string", default: "Our Story" }
+          - { label: "Story Subtitle", name: "story_subtitle", widget: "string", default: "From a small idea to a fashion destination" }
+          - { label: "Story Content", name: "story_content", widget: "text", default: "Founded in 2020, Famms began as a small boutique with a big vision: to make quality fashion accessible to everyone." }
+          - { label: "Story Content 2", name: "story_content_2", widget: "text", default: "Our journey has been driven by passion for fashion and commitment to customer satisfaction." }
+          - { label: "Story Content 3", name: "story_content_3", widget: "text", default: "Today, Famms stands as a testament to what can be achieved with dedication, hard work, and a genuine love for fashion." }
+          - { label: "Story Image", name: "story_image", widget: "image", required: false }
+          - { label: "Gallery Title", name: "gallery_title", widget: "string", default: "Galeri Kami" }
+          - { label: "Gallery Subtitle", name: "gallery_subtitle", widget: "string", default: "Koleksi fashion terbaik kami" }
+          - { label: "Mission Title", name: "mission_title", widget: "string", default: "Our Mission & Values" }
+          - { label: "Mission Subtitle", name: "mission_subtitle", widget: "string", default: "What drives us every day" }
+          - { label: "Mission 1 Title", name: "mission_1_title", widget: "string", default: "Quality First" }
+          - { label: "Mission 1 Description", name: "mission_1_description", widget: "text", default: "We never compromise on quality. Every product is carefully selected and tested to ensure it meets our high standards." }
+          - { label: "Mission 2 Title", name: "mission_2_title", widget: "string", default: "Customer Focus" }
+          - { label: "Mission 2 Description", name: "mission_2_description", widget: "text", default: "Our customers are at the center of everything we do. We listen, learn, and continuously improve based on your feedback." }
+          - { label: "Mission 3 Title", name: "mission_3_title", widget: "string", default: "Sustainability" }
+          - { label: "Mission 3 Description", name: "mission_3_description", widget: "text", default: "We are committed to sustainable fashion practices that protect our planet and support ethical manufacturing." }
+          - { label: "Team Title", name: "team_title", widget: "string", default: "Meet Our Team" }
+          - { label: "Team Subtitle", name: "team_subtitle", widget: "string", default: "The passionate people behind Famms" }
+          - { label: "Team Member 1 Name", name: "team_1_name", widget: "string", default: "Sarah Johnson" }
+          - { label: "Team Member 1 Role", name: "team_1_role", widget: "string", default: "Founder & CEO" }
+          - { label: "Team Member 1 Image", name: "team_1_image", widget: "image", required: false }
+          - { label: "Team Member 2 Name", name: "team_2_name", widget: "string", default: "Michael Chen" }
+          - { label: "Team Member 2 Role", name: "team_2_role", widget: "string", default: "Creative Director" }
+          - { label: "Team Member 2 Image", name: "team_2_image", widget: "image", required: false }
+          - { label: "Team Member 3 Name", name: "team_3_name", widget: "string", default: "Emily Davis" }
+          - { label: "Team Member 3 Role", name: "team_3_role", widget: "string", default: "Marketing Manager" }
+          - { label: "Team Member 3 Image", name: "team_3_image", widget: "image", required: false }
+          - { label: "Team Member 4 Name", name: "team_4_name", widget: "string", default: "James Wilson" }
+          - { label: "Team Member 4 Role", name: "team_4_role", widget: "string", default: "Operations Manager" }
+          - { label: "Team Member 4 Image", name: "team_4_image", widget: "image", required: false }
+          - { label: "Stat 1 Number", name: "stat_1_number", widget: "string", default: "50K+" }
+          - { label: "Stat 1 Label", name: "stat_1_label", widget: "string", default: "Happy Customers" }
+          - { label: "Stat 2 Number", name: "stat_2_number", widget: "string", default: "1000+" }
+          - { label: "Stat 2 Label", name: "stat_2_label", widget: "string", default: "Products" }
+          - { label: "Stat 3 Number", name: "stat_3_number", widget: "string", default: "50+" }
+          - { label: "Stat 3 Label", name: "stat_3_label", widget: "string", default: "Brand Partners" }
+          - { label: "Stat 4 Number", name: "stat_4_number", widget: "string", default: "4.9★" }
+          - { label: "Stat 4 Label", name: "stat_4_label", widget: "string", default: "Average Rating" }
+          - { label: "CTA Title", name: "cta_title", widget: "string", default: "Ready to Experience the Famms Difference?" }
+          - { label: "CTA Description", name: "cta_description", widget: "text", default: "Join thousands of satisfied customers who have discovered their perfect style with us." }
