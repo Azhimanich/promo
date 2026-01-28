@@ -1020,10 +1020,10 @@
       <script src="js/simple-cms-bridge.js"></script>
       <script>
         if (window.netlifyIdentity) {
-          window.netlifyIdentity.on('init', user => {
+          window.netlifyIdentity.on("init", user => {
             if (!user) {
-              window.netlifyIdentity.on('login', () => {
-                document.location.href = '/admin/login.html';
+              window.netlifyIdentity.on("login", () => {
+                document.location.href = "/admin/simple.html";
               });
             }
           });
