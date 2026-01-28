@@ -157,6 +157,27 @@
             color: #27ae60;
             font-weight: bold;
         }
+        
+        .info-box {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            text-align: left;
+        }
+        
+        .info-box h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .info-box p {
+            color: #7f8c8d;
+            font-size: 14px;
+            line-height: 1.5;
+        }
     </style>
 </head>
 <body>
@@ -166,18 +187,28 @@
             <p>Admin Panel</p>
         </div>
         
+        <div class="info-box">
+            <h4>🔐 Secure Admin Access</h4>
+            <p>This is a private admin panel. Access is restricted to invited users only. Please use your registered email and password.</p>
+        </div>
+        
         <div id="error" class="error"></div>
         <div id="success" class="success"></div>
         
         <div class="login-form">
             <div id="login-section">
                 <div class="form-group">
-                    <label for="email">Email</label>
+                    <label for="email">Email Address</label>
                     <input type="email" id="email" placeholder="admin@example.com" required>
                 </div>
                 
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password" required>
+                </div>
+                
                 <button id="login-btn" class="login-btn" onclick="handleLogin()">
-                    Login with GitHub
+                    🔐 Login to Admin Panel
                 </button>
             </div>
         </div>
@@ -211,6 +242,7 @@
         
         function handleLogin() {
             const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
             const loginBtn = document.getElementById('login-btn');
             const loginSection = document.getElementById('login-section');
             const loading = document.getElementById('loading');
@@ -218,8 +250,15 @@
             const success = document.getElementById('success');
             
             // Basic validation
-            if (!email) {
-                showError('Please enter your email address');
+            if (!email || !password) {
+                showError('Please enter both email and password');
+                return;
+            }
+            
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showError('Please enter a valid email address');
                 return;
             }
             
@@ -231,9 +270,20 @@
             
             // Initiate Netlify Identity login
             if (window.netlifyIdentity) {
-                window.netlifyIdentity.open('login', 'github');
+                // For email/password login, we need to use Netlify Identity directly
+                window.netlifyIdentity.login(email, password)
+                    .then(user => {
+                        console.log('Login successful:', user);
+                        redirectToAdmin();
+                    })
+                    .catch(err => {
+                        console.error('Login error:', err);
+                        showError('Login failed. Please check your email and password, or contact admin for invitation.');
+                        loginSection.style.display = 'block';
+                        loading.style.display = 'none';
+                    });
             } else {
-                showError('Netlify Identity not available');
+                showError('Authentication service not available');
                 loginSection.style.display = 'block';
                 loading.style.display = 'none';
             }
@@ -273,12 +323,18 @@
             
             window.netlifyIdentity.on('error', err => {
                 console.error('Identity error:', err);
-                showError('Authentication failed. Please try again.');
+                showError('Authentication failed. Please check your credentials or contact admin for invitation.');
             });
         }
         
-        // Handle Enter key in email field
+        // Handle Enter key in form fields
         document.getElementById('email').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('password').focus();
+            }
+        });
+        
+        document.getElementById('password').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 handleLogin();
             }
